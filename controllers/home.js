@@ -1,3 +1,5 @@
+const {CommonDBOperation,attendanceRegistration} = require('../models/home');
+
 exports.getHome = (req,res) => {
     res.render('../views/home.ejs')
 }
@@ -5,7 +7,8 @@ exports.getHome = (req,res) => {
 exports.postAttendance = (req,res) => {
     const EmployeeID = req.body.EmployeeID;
     const EmployeePassword = req.body.EmployeePassword;
-    console.log(`EmployeeID is ${EmployeeID}`);
-    console.log(`EmployeePassword is ${EmployeePassword}`);
+    const collectionName = 'EmployeeData';
+    const attendance = new attendanceRegistration(collectionName,EmployeeID,EmployeePassword);
+    attendance.record();
     res.redirect('/');
 }
