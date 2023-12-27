@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <div>
+        <h1>出退勤管理</h1>
+        <form action="/admin" method="GET">
+            <button type="submit">管理者用</button>
+        </form>
+    </div>
+    
+    <div>
+        <form action="/input" method="POST">
+            <input type="text" placeholder="IDを入力" name="EmployeeID">
+            <input type="text" placeholder="パスワードを入力" name="EmployeePassword">
+            <button type="submit">出勤する</button>
+        </form>
+    </div>
+</body>
+</html>
