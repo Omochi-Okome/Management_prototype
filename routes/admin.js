@@ -6,4 +6,8 @@ router.get('/admin',adminController.getLoginScreen);
 
 router.post('/adminLogin',adminController.postLogin);
 
+router.get('/admin/home',adminController.getHome);
+
+router.get('/admin/employeeInformation',adminController.getEmployeeInformation);
+
 module.exports = router;

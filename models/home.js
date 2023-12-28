@@ -8,7 +8,7 @@ class CommonDBOperation {
         this.employeePassword = employeePassword;
     }
 
-    inspectDB(){
+    inspectDB() {
         const DB = getDB();
         const collection = DB.collection(this.collectionName);
         console.log(this.collectionName);
@@ -23,6 +23,7 @@ class CommonDBOperation {
                     console.log(`従業員名:${data[0].employeeName}`);
                     console.log(`ID:${data[0].employeeID}`);
                     console.log(`Password:${data[0].employeePassword}`);
+                    console.log(`時給:${data[0].employeeHourlyWage}円`);
                 } else {
                     console.log("パスワードかIDが誤っています。");
                 }

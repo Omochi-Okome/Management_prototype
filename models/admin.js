@@ -22,8 +22,10 @@ class CommonDBOperation {
                     console.log("パスワードとIDが一致しました!!");
                     console.log(`ID:${data[0].administratorID}`);
                     console.log(`Password:${data[0].administratorPassword}`);
+                    return true;
                 } else {
                     console.log("パスワードかIDが誤っています。");
+                    return false;
                 }
                 return data;
             })
