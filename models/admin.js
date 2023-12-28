@@ -11,23 +11,17 @@ class CommonDBOperation {
     inspectDB(){
         const DB = getDB();
         const collection = DB.collection(this.collectionName);
-        console.log(this.collectionName);
-        console.log(this.administratorID);
-        console.log(this.administratorPassword);
         return collection
             .find({administratorID:this.administratorID,administratorPassword:this.administratorPassword})
             .toArray()
             .then(data => {
                 if (data.length > 0) {
                     console.log("パスワードとIDが一致しました!!");
-                    console.log(`ID:${data[0].administratorID}`);
-                    console.log(`Password:${data[0].administratorPassword}`);
                     return true;
                 } else {
                     console.log("パスワードかIDが誤っています。");
                     return false;
                 }
-                return data;
             })
             .catch(err => {
                 console.log(err);

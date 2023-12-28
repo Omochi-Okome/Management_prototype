@@ -11,9 +11,6 @@ class CommonDBOperation {
     inspectDB() {
         const DB = getDB();
         const collection = DB.collection(this.collectionName);
-        console.log(this.collectionName);
-        console.log(this.employeeID);
-        console.log(this.employeePassword);
         return collection
             .find({employeeID:this.employeeID,employeePassword:this.employeePassword})
             .toArray()
@@ -68,4 +65,4 @@ class attendanceRegistration {
 
 } 
 
-module.exports = {CommonDBOperation, attendanceRegistration};
+module.exports = {attendanceRegistration};
