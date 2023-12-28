@@ -1,0 +1,32 @@
+/* styles.css */
+body {
+    font-family: Arial, sans-serif;
+}
+
+.table-container {
+    margin-top: 20px; /* テーブルと上部の間隔を追加 */
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px; /* テーブルの上部の間隔を追加 */
+}
+
+th, td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: left;
+}
+
+th {
+    background-color: #f2f2f2;
+}
+
+tbody td {
+    word-break: break-word; /* 長い単語がはみ出さないように */
+}
+
+button {
+    margin-top: 20px; /* ボタンと上部の間隔を追加 */
+}
