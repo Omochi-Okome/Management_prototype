@@ -42,6 +42,7 @@ class CommonDBOperation {
           .toArray()
           .then(data => {
             console.log(data);
+            return data;
           })
       }
 
@@ -57,6 +58,11 @@ class attendanceRegistration {
     record(){
         const operation = new CommonDBOperation(this.collectionName,parseInt(this.employeeID),parseInt(this.employeePassword));
         return operation.inspectDB();
+    }
+
+    fetchAll(){
+        const operation = new CommonDBOperation(this.collectionName);
+        return operation.fetchAll();
     }
 
 } 

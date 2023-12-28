@@ -1,4 +1,5 @@
 const {administrator} = require('../models/admin');
+const {attendanceRegistration} = require('../models/home');
 
 
 //以下ログイン前
@@ -31,5 +32,22 @@ exports.getHome = (req,res) => {
 }
 
 exports.getEmployeeInformation = (req,res) => {
-    res.render('../views/admin/employeeInformation');
+    const collectionName = 'EmployeeData';
+    const attendance = new attendanceRegistration(collectionName);
+    attendance.fetchAll()
+    .then(result => {
+        const employeeNames = result.map(employee => employee.employeeName);
+        const employeeIDs = result.map(employee => employee.employeeID);
+        const employeePasswords = result.map(employee => employee.employeePassword);
+        const employeeHourlyWages = result.map(employee => employee.employeeHourlyWage);
+        res.render('../views/admin/employeeInformation',{
+        employeeName:employeeNames,
+        employeeID:employeeIDs,
+        employeePassword:employeePasswords,
+        employeeHourlyWage:employeeHourlyWages,
+    }
+    )})
+    .catch(err => {
+        console.log(err);
+    })
 }

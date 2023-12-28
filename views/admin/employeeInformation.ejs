@@ -7,5 +7,28 @@
 </head>
 <body>
     <h1>従業員データ</h1>
+    <form action="/admin/home" method="GET">
+        <button type="submit">管理者ホームに戻る</button>
+    </form>
+    <table>
+        <thead>
+            <tr>
+                <th>従業員氏名</th>
+                <th>従業員ID</th>
+                <th>従業員パスワード</th>
+                <th>従業員の時給</th>
+            </tr>
+        </thead>
+        <tbody>
+            <% for (let i = 0; i <= employeeName.length -1; i++) { %>
+                <tr>
+                    <td><%= employeeName[i] %></td>
+                    <td><%= employeeID[i] %></td>
+                    <td><%= employeePassword[i] %></td>
+                    <td><%= employeeHourlyWage[i] %>円</td>
+                </tr>
+            <% } %>
+        </tbody>
+    </table>
 </body>
 </html>
