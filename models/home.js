@@ -24,10 +24,11 @@ class CommonDBOperation {
                     console.log(`ID:${data[0].employeeID}`);
                     console.log(`Password:${data[0].employeePassword}`);
                     console.log(`時給:${data[0].employeeHourlyWage}円`);
+                    return true;
                 } else {
                     console.log("パスワードかIDが誤っています。");
+                    return false;
                 }
-                return data;
             })
             .catch(err => {
                 console.log(err);
@@ -55,7 +56,7 @@ class attendanceRegistration {
         this.collectionName = collectionName;
     }
 
-    record(){
+    checkIDPassword(){
         const operation = new CommonDBOperation(this.collectionName,parseInt(this.employeeID),parseInt(this.employeePassword));
         return operation.inspectDB();
     }

@@ -1,6 +1,6 @@
 require('date-utils');
 const {attendanceRegistration} = require('../models/home');
-const {recordEmployeeWork} = require('../models/work');
+const {recordStartWork,recordEndWork} = require('../models/work');
 
 exports.getHome = (req,res) => {
     res.render('../views/home.ejs')
@@ -13,16 +13,34 @@ exports.postAttendance = (req,res) => {
     const collectionName = 'EmployeeData';
     var currentTime = new Date();
     var formatted = currentTime.toFormat("YYYY年MM月DD日HH24時MI分SS秒");
+    const nowTime = formatted;
     if (action === "startWork") {
-        const startTime = formatted;
-        const attendance = new attendanceRegistration(collectionName,employeeID,employeePassword);
-        const recordTime = new recordEmployeeWork(startTime,employeeID);
-        recordTime.writeStartTime();
-        attendance.record();
+        const attendance = new attendanceRegistration(collectionName,employeeID,employeePassword)
+        const recordTime = new recordStartWork(nowTime,employeeID);
+        attendance.checkIDPassword()
+        .then(result => {
+            if(result) {
+               recordTime.writeStartTime(); 
+            }
+        })
+        .catch(err =>{
+            res.redirect('/');
+        });
+        
     } else if (action === "break") {
         console.log("工事中")
     } else if (action === "endWork") {
-        console.log("工事中");
+        const attendance = new attendanceRegistration(collectionName,employeeID,employeePassword)
+        const recordTime = new recordEndWork(employeeID,nowTime);
+        attendance.checkIDPassword()
+        .then(result => {
+            if(result) {
+               recordTime.writeEndTime(); 
+            }
+        })
+        .catch(err =>{
+            res.redirect('/');
+        });
     }
     res.redirect('/');    
 }

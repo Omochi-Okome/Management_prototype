@@ -22,7 +22,7 @@ class CommonDBOperation {
       }
 }
 
-class recordEmployeeWork {
+class recordStartWork {
     constructor(startTime,employeeID){
         this.collectionName = "workTimeRecord";
         this.startTime = startTime;
@@ -40,14 +40,49 @@ class recordEmployeeWork {
             }
         };
         return collection
-            .insertOne({ startTime:this.startTime,employeeID:this.employeeID},updateData)
+            .insertOne({ employeeID:this.employeeID,startTime:this.startTime,endTime:null},updateData)
             .then(result => {
             })
             .catch(err => {
             console.log(err);
             })
     }
-
 }
 
-module.exports= {recordEmployeeWork};
+class recordEndWork {
+    constructor(employeeID,endTime){
+        this.employeeID = employeeID;
+        this.endTime = endTime;
+        this.collectionName = "workTimeRecord";
+    }
+    async writeEndTime() {
+        const DB = getDB();
+        const collection = DB.collection(this.collectionName);
+        try{
+            const findStartTime = await collection.findOne({employeeID:parseInt(this.employeeID)});
+            console.log('findStartTime:', findStartTime.startTime);
+            const existingData = findStartTime && findStartTime.startTime ? findStartTime.startTime : null;
+
+            const updateData = {
+                $set: {
+                    employeeID: parseInt(this.employeeID),
+                    startTime: existingData,
+                    endTime: this.endTime
+                }
+            };
+
+            const result = await collection.updateOne({ employeeID:parseInt(this.employeeID),endTime:null }, updateData);
+
+            if (result.modifiedCount >0) {
+                console.log('更新に成功しました')
+            } else {
+                console.log('更新に失敗しました。')
+                console.log(result);
+            }
+        } catch(err) {
+            console.log(err);
+        }
+    }
+}
+
+module.exports= {recordStartWork,recordEndWork};
