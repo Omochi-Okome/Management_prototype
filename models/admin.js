@@ -2,27 +2,26 @@ const mongoDB = require('mongodb');
 const getDB = require('../util/database').getDB;
 
 class CommonDBOperation {
-    constructor(collectionName,employeeID,employeePassword){
+    constructor(collectionName,administratorID,administratorPassword){
         this.collectionName = collectionName;
-        this.employeeID = employeeID;
-        this.employeePassword = employeePassword;
+        this.administratorID = administratorID;
+        this.administratorPassword = administratorPassword;
     }
 
     inspectDB(){
         const DB = getDB();
         const collection = DB.collection(this.collectionName);
         console.log(this.collectionName);
-        console.log(this.employeeID);
-        console.log(this.employeePassword);
+        console.log(this.administratorID);
+        console.log(this.administratorPassword);
         return collection
-            .find({employeeID:this.employeeID,employeePassword:this.employeePassword})
+            .find({administratorID:this.administratorID,administratorPassword:this.administratorPassword})
             .toArray()
             .then(data => {
                 if (data.length > 0) {
                     console.log("パスワードとIDが一致しました!!");
-                    console.log(`従業員名:${data[0].employeeName}`);
-                    console.log(`ID:${data[0].employeeID}`);
-                    console.log(`Password:${data[0].employeePassword}`);
+                    console.log(`ID:${data[0].administratorID}`);
+                    console.log(`Password:${data[0].administratorPassword}`);
                 } else {
                     console.log("パスワードかIDが誤っています。");
                 }
@@ -46,18 +45,23 @@ class CommonDBOperation {
 
 }
 
-class attendanceRegistration {
-    constructor(collectionName,employeeID,employeePassword){
-        this.employeeID = employeeID;
-        this.employeePassword = employeePassword;
+class administrator {
+    constructor(collectionName,administratorID,administratorPassword){
+        this.administratorID = administratorID;
+        this.administratorPassword = administratorPassword;
         this.collectionName = collectionName;
     }
 
     record(){
-        const operation = new CommonDBOperation(this.collectionName,parseInt(this.employeeID),parseInt(this.employeePassword));
+        const operation = new CommonDBOperation(this.collectionName,parseInt(this.administratorID),parseInt(this.administratorPassword));
         return operation.inspectDB();
+    }
+
+    test(){
+        const operation = new CommonDBOperation(this.collectionName);
+        return operation.fetchAll();
     }
 
 } 
 
-module.exports = {CommonDBOperation, attendanceRegistration};
+module.exports = {administrator};

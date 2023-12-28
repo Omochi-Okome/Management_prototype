@@ -1,11 +1,15 @@
+const {administrator} = require('../models/admin');
+
 exports.getLoginScreen = (req,res) => {
     res.render('../views/admin.ejs');
 }
 
 exports.postLogin = (req,res) => {
-    const adminID = req.body.adminID;
-    const adminPassword = req.body.adminPassword;
-    console.log(`adminID is ${adminID} `);
-    console.log(`adminPassword is ${adminPassword} `);
+    const administratorID = req.body.adminID;
+    const administratorPassword = req.body.adminPassword;
+    const collectionName = 'administratorData';
+    const attendance = new administrator(collectionName,administratorID,administratorPassword);
+    attendance.record();
+    // attendance.test();
     res.redirect('/admin');
 }
