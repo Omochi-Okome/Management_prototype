@@ -1,5 +1,8 @@
 const mongoDB = require('mongodb');
 const getDB = require('../util/database').getDB;
+const dayjs = require('dayjs');
+const localizedFormat = require('dayjs/plugin/localizedFormat');
+dayjs.extend(localizedFormat);
 
 class CommonDBOperation {
     constructor(collectionName,startTime,breakTime,endTime,employeeID){
@@ -35,16 +38,6 @@ class recordStartWork {
     writeStartTime() {
         const DB = getDB();
         const collection = DB.collection(this.collectionName);
-        const updateData = {
-            $set: {
-                employeeName:this.employeeName,
-                employeeID:this.employeeID,
-                startTime: this.startTime,
-                endTime: this.endTime,
-                employeeHourlyWage: this.employeeHourlyWage,
-                todayWage: this.todayWage,
-            }
-        };
         return collection
             .insertOne({
                 employeeName:this.employeeName,
@@ -53,7 +46,7 @@ class recordStartWork {
                 endTime:null,
                 employeeHourlyWage:this.employeeHourlyWage,
                 todayWage:this.todayWage
-            },updateData)
+            })
             .then(result => {
             })
             .catch(err => {
@@ -78,7 +71,6 @@ class recordEndWork {
                 endTime:null
             });
             const existingData = findStartTime && findStartTime.startTime ? findStartTime.startTime : null;
-
             const updateData = {
                 $set: {
                     employeeID: parseInt(this.employeeID),
@@ -125,7 +117,6 @@ class fetchName {
             .findOne({employeeID:parseInt(employeeID)})
             .then(result => {
                 if (result) {
-                    console.log('名前がわかったぞ！'+result.employeeName);
                     return result.employeeName;
                 } else {
                     console.log('IDがおかしいぞ');
@@ -149,7 +140,6 @@ class fetchHourlyWage {
             .findOne({employeeID:parseInt(employeeID)})
             .then(result => {
                 if (result) {
-                    console.log('時給がわかったぞ！'+result.employeeHourlyWage);
                     return result.employeeHourlyWage;
                 } else {
                     console.log('IDがおかしいぞ');
@@ -163,4 +153,44 @@ class fetchHourlyWage {
 }
 
 
-module.exports= {recordStartWork,recordEndWork,getWorkRecord,fetchName,fetchHourlyWage};
+//勤務した日の給料計算
+class calculateWage {
+    constructor(collectionName){
+        this.collectionName = collectionName;
+    }
+    async calculateTodayWage(employeeID) {
+        const DB = getDB();
+        try {
+            const result = await DB.collection(this.collectionName)
+                .findOne({employeeID:parseInt(employeeID),todayWage:null})
+                console.log('この私が確かめてやろう。result:'+result);
+                console.log('この私が確かめてやろう。result.startTime:'+result.startTime);
+                console.log('この私が確かめてやろう。result.endTime:'+result.endTime);
+                if(result && result.startTime &&result.endTime){
+                    const startTime = dayjs(result.startTime);
+                    const endTime = dayjs(result.endTime);
+                if (startTime.isValid() && endTime.isValid()) {
+                    const calculateWorkTime = endTime.diff(startTime,'minutes');
+                    const employeeMinutesWage = result.employeeHourlyWage/60;
+                    const todayWage = calculateWorkTime*employeeMinutesWage;
+                    const updateData = {
+                        $set: { todayWage: parseInt(todayWage)}
+                    };
+
+                    await DB.collection(this.collectionName)
+                        .updateOne({_id:result._id,todayWage:null},updateData);
+                } else {
+                    console.log("データを取得できませんでした");
+                }
+            } else {
+                console.log('エラーが発生しました。');
+            }
+            
+            } catch(err) {
+                console.log('エラーが発生。',err);
+        }
+    }
+}
+
+
+module.exports= {recordStartWork,recordEndWork,getWorkRecord,fetchName,fetchHourlyWage,calculateWage};

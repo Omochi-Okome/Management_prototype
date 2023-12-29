@@ -65,6 +65,7 @@ exports.getWorkRecord = (req,res) => {
         const employeeIDs = result.map(employee => employee.employeeID);
         const startTimes = result.map(employee => employee.startTime);
         const endTimes = result.map(employee => employee.endTime);
+        const todayWages = result.map(employee => employee.todayWage);
         const formattedStartTimes = result.map(employee => dayjs(employee.startTime).format("YYYY年MM月DD日HH時mm分ss秒"));
         const formattedEndTimes = result.map(employee => dayjs(employee.endTime).format("YYYY年MM月DD日HH時mm分ss秒"));
         res.render('../views/admin/workRecord',{
@@ -73,7 +74,8 @@ exports.getWorkRecord = (req,res) => {
             startTime:startTimes,
             endTime:endTimes,
             formattedStartTime:formattedStartTimes,
-            formattedEndTime:formattedEndTimes
+            formattedEndTime:formattedEndTimes,
+            todayWage:todayWages,
 
         })
     })
