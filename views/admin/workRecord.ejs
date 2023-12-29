@@ -10,9 +10,10 @@
     <form action="/admin/home" method="GET">
         <button type="submit">管理者ホームに戻る</button>
     </form>
-    <table>
+    <table border="1">
         <thead>
             <tr>
+                <th>従業員氏名</th>
                 <th>従業員ID</th>
                 <th>出勤時刻</th>
                 <th>退勤時刻</th>
@@ -23,9 +24,10 @@
         <tbody>
             <% for (let i = 0; i <= employeeID.length -1; i++) { %>
                 <tr>
+                    <td><%= employeeName[i]%></td>
                     <td><%= employeeID[i] %></td>
-                    <td><%= startTime[i] %></td>
-                    <td><%= endTime[i] %></td>
+                    <td><%= formattedStartTime[i] %></td>
+                    <td><%= formattedEndTime[i] %></td>
                     
                     <td><%
                         const startDateTime = new Date(`${startTime[i]}Z`);

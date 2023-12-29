@@ -1,6 +1,9 @@
 const {administrator} = require('../models/admin');
 const {attendanceRegistration} = require('../models/home');
 const {getWorkRecord} = require('../models/work');
+const dayjs = require('dayjs');
+const localizedFormat = require('dayjs/plugin/localizedFormat');
+dayjs.extend(localizedFormat);
 
 //以下ログイン前
 exports.getLoginScreen = (req,res) => {
@@ -57,13 +60,20 @@ exports.getWorkRecord = (req,res) => {
     const workRecord = new getWorkRecord(collectionName);
     workRecord.getWorkRecord()
     .then(result => {
+        const employeeNames = result.map(employee => employee.employeeName);
         const employeeIDs = result.map(employee => employee.employeeID);
         const startTimes = result.map(employee => employee.startTime);
         const endTimes = result.map(employee => employee.endTime);
+        const formattedStartTimes = result.map(employee => dayjs(employee.startTime).format("YYYY年MM月DD日HH時mm分ss秒"));
+        const formattedEndTimes = result.map(employee => dayjs(employee.endTime).format("YYYY年MM月DD日HH時mm分ss秒"));
         res.render('../views/admin/workRecord',{
+            employeeName:employeeNames,
             employeeID:employeeIDs,
             startTime:startTimes,
-            endTime:endTimes
+            endTime:endTimes,
+            formattedStartTime:formattedStartTimes,
+            formattedEndTime:formattedEndTimes
+
         })
     })
     .catch(err => {
