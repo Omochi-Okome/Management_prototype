@@ -11,7 +11,7 @@
     <form action="/admin/home" method="GET">
         <button type="submit">管理者ホームに戻る</button>
     </form>
-    <table>
+    <table border="1">
         <thead>
             <tr>
                 <th>従業員氏名</th>
@@ -29,8 +29,9 @@
                     <td><%= employeeHourlyWage[i] %>円</td>
                 </tr>
             <% } %>
-            <td>計:<%= employeeName.length %>名</td>
+            
         </tbody>
     </table>
+    <td>計:<%= employeeName.length %>名</td>
 </body>
 </html>
