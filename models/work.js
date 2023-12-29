@@ -35,23 +35,31 @@ class recordStartWork {
         this.employeeHourlyWage = parseInt(employeeHourlyWage);
         this.todayWage = null
     }
-    writeStartTime() {
+    async writeStartTime() {
         const DB = getDB();
         const collection = DB.collection(this.collectionName);
-        return collection
-            .insertOne({
+
+        const ngData = await collection.findOne({
+            employeeID:this.employeeID,
+            endTime:null
+        });
+        if(!ngData) {
+            try {
+                const result = await collection.insertOne({
                 employeeName:this.employeeName,
                 employeeID:this.employeeID,
                 startTime:this.startTime,
                 endTime:null,
                 employeeHourlyWage:this.employeeHourlyWage,
                 todayWage:this.todayWage
-            })
-            .then(result => {
-            })
-            .catch(err => {
+                })
+                console.log(result);
+            } catch(err) {
             console.log(err);
-            })
+            }   
+        } else {
+            console.log('不正な出勤を感知しました')
+        }   
     }
 }
 
