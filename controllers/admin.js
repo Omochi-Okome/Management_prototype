@@ -34,6 +34,7 @@ exports.getHome = (req,res) => {
     res.render('../views/admin/admin_home.ejs');
 }
 
+//続き、給料計算
 exports.getEmployeeInformation = (req,res) => {
     const collectionName = 'EmployeeData';
     const attendance = new attendanceRegistration(collectionName);

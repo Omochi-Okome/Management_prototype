@@ -22,12 +22,15 @@ class CommonDBOperation {
       }
 }
 
+//出勤時刻の記録
 class recordStartWork {
-    constructor(startTime,employeeName,employeeID){
+    constructor(startTime,employeeName,employeeID,employeeHourlyWage){
         this.collectionName = "workTimeRecord";
         this.startTime = startTime;
         this.employeeName = employeeName;
         this.employeeID = parseInt(employeeID);
+        this.employeeHourlyWage = parseInt(employeeHourlyWage);
+        this.todayWage = null
     }
     writeStartTime() {
         const DB = getDB();
@@ -37,11 +40,20 @@ class recordStartWork {
                 employeeName:this.employeeName,
                 employeeID:this.employeeID,
                 startTime: this.startTime,
-                endTime: this.endTime
+                endTime: this.endTime,
+                employeeHourlyWage: this.employeeHourlyWage,
+                todayWage: this.todayWage,
             }
         };
         return collection
-            .insertOne({employeeName:this.employeeName,employeeID:this.employeeID,startTime:this.startTime,endTime:null},updateData)
+            .insertOne({
+                employeeName:this.employeeName,
+                employeeID:this.employeeID,
+                startTime:this.startTime,
+                endTime:null,
+                employeeHourlyWage:this.employeeHourlyWage,
+                todayWage:this.todayWage
+            },updateData)
             .then(result => {
             })
             .catch(err => {
@@ -50,6 +62,7 @@ class recordStartWork {
     }
 }
 
+//退勤時刻の記録
 class recordEndWork {
     constructor(employeeID,endTime){
         this.employeeID = employeeID;
@@ -60,8 +73,10 @@ class recordEndWork {
         const DB = getDB();
         const collection = DB.collection(this.collectionName);
         try{
-            const findStartTime = await collection.findOne({employeeID:parseInt(this.employeeID),endTime:null});
-            console.log('findStartTime:', findStartTime.startTime);
+            const findStartTime = await collection.findOne({
+                employeeID:parseInt(this.employeeID),
+                endTime:null
+            });
             const existingData = findStartTime && findStartTime.startTime ? findStartTime.startTime : null;
 
             const updateData = {
@@ -86,6 +101,7 @@ class recordEndWork {
     }
 }
 
+//労働記録の取得
 class getWorkRecord {
     constructor(collectionName){
         this.collectionName = collectionName;
@@ -97,6 +113,7 @@ class getWorkRecord {
     }
 }
 
+//労働記録をするにあたってEmployeeDataから氏名を取得
 class fetchName {
     constructor(collectionName){
         this.collectionName = collectionName;
@@ -121,4 +138,29 @@ class fetchName {
     }
 }
 
-module.exports= {recordStartWork,recordEndWork, getWorkRecord, fetchName};
+//給料計算をするために時給を取得
+class fetchHourlyWage {
+    constructor(collectionName){
+        this.collectionName = collectionName;
+    }
+    fetchHourlyWage(employeeID) {
+        const DB = getDB();
+        return DB.collection(this.collectionName)
+            .findOne({employeeID:parseInt(employeeID)})
+            .then(result => {
+                if (result) {
+                    console.log('時給がわかったぞ！'+result.employeeHourlyWage);
+                    return result.employeeHourlyWage;
+                } else {
+                    console.log('IDがおかしいぞ');
+                    return null;
+                }
+            })
+            .catch(err => {
+                console.log(err);
+            })
+    }
+}
+
+
+module.exports= {recordStartWork,recordEndWork,getWorkRecord,fetchName,fetchHourlyWage};
