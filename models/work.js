@@ -60,7 +60,7 @@ class recordEndWork {
         const DB = getDB();
         const collection = DB.collection(this.collectionName);
         try{
-            const findStartTime = await collection.findOne({employeeID:parseInt(this.employeeID)});
+            const findStartTime = await collection.findOne({employeeID:parseInt(this.employeeID),endTime:null});
             console.log('findStartTime:', findStartTime.startTime);
             const existingData = findStartTime && findStartTime.startTime ? findStartTime.startTime : null;
 
