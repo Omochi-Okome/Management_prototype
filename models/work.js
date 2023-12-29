@@ -23,9 +23,10 @@ class CommonDBOperation {
 }
 
 class recordStartWork {
-    constructor(startTime,employeeID){
+    constructor(startTime,employeeName,employeeID){
         this.collectionName = "workTimeRecord";
         this.startTime = startTime;
+        this.employeeName = employeeName;
         this.employeeID = parseInt(employeeID);
     }
     writeStartTime() {
@@ -33,14 +34,14 @@ class recordStartWork {
         const collection = DB.collection(this.collectionName);
         const updateData = {
             $set: {
+                employeeName:this.employeeName,
                 employeeID:this.employeeID,
                 startTime: this.startTime,
-                breakTime: this.breakTime,
                 endTime: this.endTime
             }
         };
         return collection
-            .insertOne({ employeeID:this.employeeID,startTime:this.startTime,endTime:null},updateData)
+            .insertOne({employeeName:this.employeeName,employeeID:this.employeeID,startTime:this.startTime,endTime:null},updateData)
             .then(result => {
             })
             .catch(err => {
@@ -96,4 +97,28 @@ class getWorkRecord {
     }
 }
 
-module.exports= {recordStartWork,recordEndWork, getWorkRecord};
+class fetchName {
+    constructor(collectionName){
+        this.collectionName = collectionName;
+    }
+
+    fectchName(employeeID) {
+        const DB = getDB();
+        return DB.collection(this.collectionName)
+            .findOne({employeeID:parseInt(employeeID)})
+            .then(result => {
+                if (result) {
+                    console.log('名前がわかったぞ！'+result.employeeName);
+                    return result.employeeName;
+                } else {
+                    console.log('IDがおかしいぞ');
+                    return null;
+                }
+            })
+            .catch(err => {
+                console.log(err);
+            })
+    }
+}
+
+module.exports= {recordStartWork,recordEndWork, getWorkRecord, fetchName};
