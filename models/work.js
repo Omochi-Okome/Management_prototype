@@ -85,4 +85,15 @@ class recordEndWork {
     }
 }
 
-module.exports= {recordStartWork,recordEndWork};
+class getWorkRecord {
+    constructor(collectionName){
+        this.collectionName = collectionName;
+    }
+
+    getWorkRecord() {
+        const workRecord = new CommonDBOperation(this.collectionName);
+        return workRecord.fetchAll();
+    }
+}
+
+module.exports= {recordStartWork,recordEndWork, getWorkRecord};

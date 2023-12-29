@@ -10,4 +10,6 @@ router.get('/admin/home',adminController.getHome);
 
 router.get('/admin/employeeInformation',adminController.getEmployeeInformation);
 
+router.get('/admin/workRecord',adminController.getWorkRecord);
+
 module.exports = router;

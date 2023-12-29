@@ -12,7 +12,7 @@ exports.postAttendance = (req,res) => {
     const action = req.body.action;
     const collectionName = 'EmployeeData';
     var currentTime = new Date();
-    var formatted = currentTime.toFormat("YYYY年MM月DD日HH24時MI分SS秒");
+    var formatted = currentTime.toFormat("YYYY-MM-DDTHH24:MI:SS");
     const nowTime = formatted;
     if (action === "startWork") {
         const attendance = new attendanceRegistration(collectionName,employeeID,employeePassword)

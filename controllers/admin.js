@@ -1,6 +1,6 @@
 const {administrator} = require('../models/admin');
 const {attendanceRegistration} = require('../models/home');
-
+const {getWorkRecord} = require('../models/work');
 
 //以下ログイン前
 exports.getLoginScreen = (req,res) => {
@@ -49,5 +49,24 @@ exports.getEmployeeInformation = (req,res) => {
     )})
     .catch(err => {
         console.log(err);
+    })
+}
+
+exports.getWorkRecord = (req,res) => {
+    const collectionName = "workTimeRecord";
+    const workRecord = new getWorkRecord(collectionName);
+    workRecord.getWorkRecord()
+    .then(result => {
+        const employeeIDs = result.map(employee => employee.employeeID);
+        const startTimes = result.map(employee => employee.startTime);
+        const endTimes = result.map(employee => employee.endTime);
+        res.render('../views/admin/workRecord',{
+            employeeID:employeeIDs,
+            startTime:startTimes,
+            endTime:endTimes
+        })
+    })
+    .catch(err => {
+        console.log(err)
     })
 }
