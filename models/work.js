@@ -199,6 +199,7 @@ class calculateWage {
     }
 }
 
+//労働データの編集後の給与再計算
 class reCalculateWage {
     constructor(collectionName){
         this.collectionName = collectionName;

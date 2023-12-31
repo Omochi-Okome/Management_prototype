@@ -16,7 +16,7 @@ exports.postLogin = (req,res) => {
     const administratorPassword = req.body.adminPassword;
     const collectionName = 'administratorData';
     const attendance = new administrator(collectionName,administratorID,administratorPassword);
-    attendance.record()
+    attendance.inspectDB()
     .then(loginResult => {
         if(loginResult) {
             res.redirect('/admin/home');
@@ -117,15 +117,11 @@ exports.getWorkRecordEdit = (req,res) => {
 
 exports.postWorkRecordEdit = async(req,res) => {
     const _id = req.body._id;
-    const employeeName = req.body.employeeName;
-    const employeeID = req.body.employeeID;
     const formattedStartTime = req.body.formattedStartTime;
     const formattedEndTime = req.body.formattedEndTime;
-    const workTime = req.body.workTime;
-    const todayWage = req.body.todayWage;
     try{
-        for (let i = 0; employeeID && i <= employeeID.length - 1; i++) {
-            console.log("姿を見せなさい"+employeeID.length)
+        for (let i = 0; _id && i <= _id.length - 1; i++) {
+            console.log("姿を見せなさい"+_id.length)
             if(formattedEndTime[i] === ''){
                 formattedEndTime[i] = null;
             }
@@ -134,13 +130,8 @@ exports.postWorkRecordEdit = async(req,res) => {
             const calculateTodayWage = new reCalculateWage('workTimeRecord');
             await calculateTodayWage.recalculateTodayWage(_id[i]);
         }
-        
-        console.log('多分更新された');
     } catch(err) {
         console.log(err);
     }
-   
-          
-    console.log('////////////////////');
     res.redirect('/admin/workRecord');
 }

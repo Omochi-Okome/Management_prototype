@@ -1,18 +1,17 @@
-const mongoDB = require('mongodb');
 const getDB = require('../util/database').getDB;
 
-class CommonDBOperation {
+class attendanceRegistration {
     constructor(collectionName,employeeID,employeePassword){
-        this.collectionName = collectionName;
         this.employeeID = employeeID;
         this.employeePassword = employeePassword;
+        this.collectionName = collectionName;
     }
 
-    inspectDB() {
+    checkIDPassword(){
         const DB = getDB();
         const collection = DB.collection(this.collectionName);
         return collection
-            .find({employeeID:this.employeeID,employeePassword:this.employeePassword})
+            .find({employeeID:parseInt(this.employeeID),employeePassword:parseInt(this.employeePassword)})
             .toArray()
             .then(data => {
                 if (data.length > 0) {
@@ -32,7 +31,7 @@ class CommonDBOperation {
                 throw err;
             })
     }
-    //データの全取得
+
     fetchAll() {
         const db = getDB();
         return db.collection(this.collectionName)
@@ -42,26 +41,6 @@ class CommonDBOperation {
             return data;
           })
       }
-
-}
-
-class attendanceRegistration {
-    constructor(collectionName,employeeID,employeePassword){
-        this.employeeID = employeeID;
-        this.employeePassword = employeePassword;
-        this.collectionName = collectionName;
-    }
-
-    checkIDPassword(){
-        const operation = new CommonDBOperation(this.collectionName,parseInt(this.employeeID),parseInt(this.employeePassword));
-        return operation.inspectDB();
-    }
-
-    fetchAll(){
-        const operation = new CommonDBOperation(this.collectionName);
-        return operation.fetchAll();
-    }
-
 } 
 
 module.exports = {attendanceRegistration};
