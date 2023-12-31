@@ -67,8 +67,8 @@ exports.getWorkRecord = (req,res) => {
         const startTimes = result.map(employee => employee.startTime);
         const endTimes = result.map(employee => employee.endTime);
         const todayWages = result.map(employee => employee.todayWage);
-        const formattedStartTimes = result.map(employee => dayjs(employee.startTime).format("YYYY年MM月DD日HH時mm分ss秒"));
-        const formattedEndTimes = result.map(employee => dayjs(employee.endTime).format("YYYY年MM月DD日HH時mm分ss秒"));
+        const formattedStartTimes = result.map(employee => dayjs(employee.startTime).format("YYYY年MM月DD日HH時mm分"));
+        const formattedEndTimes = result.map(employee => dayjs(employee.endTime).format("YYYY年MM月DD日HH時mm分"));
         res.render('../views/admin/workRecord',{
             employeeName:employeeNames,
             employeeID:employeeIDs,
@@ -96,8 +96,8 @@ exports.getWorkRecordEdit = (req,res) => {
         const startTimes = result.map(employee => employee.startTime);
         const endTimes = result.map(employee => employee.endTime);
         const todayWages = result.map(employee => employee.todayWage);
-        const formattedStartTimes = result.map(employee => dayjs(employee.startTime).format("YYYY年MM月DD日HH時mm分ss秒"));
-        const formattedEndTimes = result.map(employee => dayjs(employee.endTime).format("YYYY年MM月DD日HH時mm分ss秒"));
+        const formattedStartTimes = result.map(employee => dayjs(employee.startTime).format("YYYY年MM月DD日HH時mm分"));
+        const formattedEndTimes = result.map(employee => dayjs(employee.endTime).format("YYYY年MM月DD日HH時mm分"));
         res.render('../views/admin/workRecordEdit',{
             _id:_id,
             employeeName:employeeNames,
@@ -132,7 +132,7 @@ exports.postWorkRecordEdit = async(req,res) => {
             const insertDate = new insertEditedRecord(_id[i],formattedStartTime[i],formattedEndTime[i]);
             await insertDate.editedRecord();
             const calculateTodayWage = new reCalculateWage('workTimeRecord');
-            await calculateTodayWage.recalculateTodayWage(employeeID[i]);
+            await calculateTodayWage.recalculateTodayWage(_id[i]);
         }
         
         console.log('多分更新された');

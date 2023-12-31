@@ -40,9 +40,9 @@
                         const hours = Math.floor(workTime / 3600);
                         const minutes = Math.floor((workTime % 3600) / 60);
                         const seconds = Math.floor(workTime % 60);
-                        const result =`${hours}時間${minutes}分${seconds}秒`;            
+                        const result =`${hours}時間${minutes}分`;            
                         %>
-                        <% if(result === 'NaN時間NaN分NaN秒'){ %>
+                        <% if(result === 'NaN時間NaN分'){ %>
                         <%= "出勤中です" %>
                         <% } else { %>
                         <%= result %>

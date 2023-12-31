@@ -203,11 +203,11 @@ class reCalculateWage {
     constructor(collectionName){
         this.collectionName = collectionName;
     }
-    async recalculateTodayWage(employeeID) {
+    async recalculateTodayWage(_id) {
         const DB = getDB();
         try {
             const result = await DB.collection(this.collectionName)
-                .findOne({employeeID:parseInt(employeeID)})
+                .findOne({_id:new mongoDB.ObjectId(_id)})
                 console.log('この私が確かめてやろう。result:'+result);
                 console.log('この私が確かめてやろう。result.startTime:'+result.startTime);
                 console.log('この私が確かめてやろう。result.endTime:'+result.endTime);

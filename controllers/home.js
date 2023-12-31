@@ -12,7 +12,7 @@ exports.postAttendance = async(req,res) => {
     const action = req.body.action;
     const collectionName = 'EmployeeData';
     var currentTime = new Date();
-    var formatted = currentTime.toFormat("YYYY-MM-DDTHH24:MI:SS");
+    var formatted = currentTime.toFormat("YYYY-MM-DDTHH24:MI");
     const nowTime = formatted;
     const fetchWage = new fetchHourlyWage(collectionName);
 
