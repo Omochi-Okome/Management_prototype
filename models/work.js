@@ -4,40 +4,18 @@ const dayjs = require('dayjs');
 const localizedFormat = require('dayjs/plugin/localizedFormat');
 dayjs.extend(localizedFormat);
 
-class CommonDBOperation {
-    constructor(collectionName,startTime,breakTime,endTime,employeeID){
-        this.collectionName = collectionName;
-        this.startTime = startTime;
-        this.breakTime = breakTime;
-        this.endTime = endTime;
-        this.employeeID = employeeID;
-    }
-    //データの全取得
-    fetchAll() {
-        const db = getDB();
-        return db.collection(this.collectionName)
-          .find()
-          .toArray()
-          .then(data => {
-            
-            return data;
-          })
-      }
-}
-
 //出勤時刻の記録
 class recordStartWork {
     constructor(startTime,employeeName,employeeID,employeeHourlyWage){
-        this.collectionName = "workTimeRecord";
         this.startTime = startTime;
         this.employeeName = employeeName;
         this.employeeID = parseInt(employeeID);
         this.employeeHourlyWage = parseInt(employeeHourlyWage);
-        this.todayWage = null
+        this.todayWage = null;
     }
     async writeStartTime() {
         const DB = getDB();
-        const collection = DB.collection(this.collectionName);
+        const collection = DB.collection('workTimeRecord');
 
         const ngData = await collection.findOne({
             employeeID:this.employeeID,
@@ -52,12 +30,12 @@ class recordStartWork {
                 endTime:null,
                 employeeHourlyWage:this.employeeHourlyWage,
                 todayWage:this.todayWage
-                })
+                });
             } catch(err) {
             console.log(err);
             }   
         } else {
-            console.log('不正な出勤を感知しました')
+            console.log('すでに出勤しています');
         }   
     }
 }
@@ -67,11 +45,10 @@ class recordEndWork {
     constructor(employeeID,endTime){
         this.employeeID = employeeID;
         this.endTime = endTime;
-        this.collectionName = "workTimeRecord";
     }
     async writeEndTime() {
         const DB = getDB();
-        const collection = DB.collection(this.collectionName);
+        const collection = DB.collection('workTimeRecord');
         try{
             const findStartTime = await collection.findOne({
                 employeeID:parseInt(this.employeeID),
@@ -89,10 +66,9 @@ class recordEndWork {
             const result = await collection.updateOne({ employeeID:parseInt(this.employeeID),endTime:null }, updateData);
 
             if (result.modifiedCount >0) {
-                console.log('更新に成功しました')
+                console.log('更新に成功しました');
             } else {
-                console.log('更新に失敗しました。')
-                console.log(result);
+                console.log('出勤のデータがありません。');
             }
         } catch(err) {
             console.log(err);
@@ -102,33 +78,30 @@ class recordEndWork {
 
 //労働記録の取得
 class getWorkRecord {
-    constructor(collectionName){
-        this.collectionName = collectionName;
-    }
-
     getWorkRecord() {
-        const workRecord = new CommonDBOperation(this.collectionName);
-        return workRecord.fetchAll();
+        const db = getDB();
+        return db.collection('workTimeRecord')
+            .find()
+            .toArray()
+            .then(data => {
+                return data;
+            })
     }
 }
 
 //労働記録をするにあたってEmployeeDataから氏名を取得
 class fetchName {
-    constructor(collectionName){
-        this.collectionName = collectionName;
-    }
-
     fectchName(employeeID) {
         const DB = getDB();
-        return DB.collection(this.collectionName)
+        return DB.collection('EmployeeData')
             .findOne({employeeID:parseInt(employeeID)})
             .then(result => {
-                if (result) {
-                    return result.employeeName;
-                } else {
-                    console.log('IDがおかしいぞ');
-                    return null;
-                }
+            if (result) {
+                return result.employeeName;
+            } else {
+                console.log('IDが誤っています。');
+                return null;
+            }
             })
             .catch(err => {
                 console.log(err);
@@ -138,18 +111,15 @@ class fetchName {
 
 //給料計算をするために時給を取得
 class fetchHourlyWage {
-    constructor(collectionName){
-        this.collectionName = collectionName;
-    }
     fetchHourlyWage(employeeID) {
         const DB = getDB();
-        return DB.collection(this.collectionName)
+        return DB.collection('EmployeeData')
             .findOne({employeeID:parseInt(employeeID)})
             .then(result => {
                 if (result) {
                     return result.employeeHourlyWage;
                 } else {
-                    console.log('IDがおかしいぞ');
+                    console.log('IDが誤っています。');
                     return null;
                 }
             })
@@ -162,17 +132,11 @@ class fetchHourlyWage {
 
 //勤務した日の給料計算
 class calculateWage {
-    constructor(collectionName){
-        this.collectionName = collectionName;
-    }
     async calculateTodayWage(employeeID) {
         const DB = getDB();
         try {
-            const result = await DB.collection(this.collectionName)
+            const result = await DB.collection('workTimeRecord')
                 .findOne({employeeID:parseInt(employeeID),todayWage:null})
-                console.log('この私が確かめてやろう。result:'+result);
-                console.log('この私が確かめてやろう。result.startTime:'+result.startTime);
-                console.log('この私が確かめてやろう。result.endTime:'+result.endTime);
                 if(result && result.startTime &&result.endTime){
                     const startTime = dayjs(result.startTime);
                     const endTime = dayjs(result.endTime);
@@ -184,10 +148,10 @@ class calculateWage {
                         $set: { todayWage: parseInt(todayWage)}
                     };
 
-                    await DB.collection(this.collectionName)
+                    await DB.collection('workTimeRecord')
                         .updateOne({_id:result._id,todayWage:null},updateData);
                 } else {
-                    console.log("データを取得できませんでした");
+                    console.log('データを取得できませんでした');
                 }
             } else {
                 console.log('エラーが発生しました。');
@@ -201,17 +165,11 @@ class calculateWage {
 
 //労働データの編集後の給与再計算
 class reCalculateWage {
-    constructor(collectionName){
-        this.collectionName = collectionName;
-    }
     async recalculateTodayWage(_id) {
         const DB = getDB();
         try {
-            const result = await DB.collection(this.collectionName)
+            const result = await DB.collection('workTimeRecord')
                 .findOne({_id:new mongoDB.ObjectId(_id)})
-                console.log('この私が確かめてやろう。result:'+result);
-                console.log('この私が確かめてやろう。result.startTime:'+result.startTime);
-                console.log('この私が確かめてやろう。result.endTime:'+result.endTime);
                 if(result && result.startTime &&result.endTime){
                     const startTime = dayjs(result.startTime);
                     const endTime = dayjs(result.endTime);
@@ -223,10 +181,10 @@ class reCalculateWage {
                         $set: { todayWage: parseInt(todayWage)}
                     };
 
-                    await DB.collection(this.collectionName)
+                    await DB.collection('workTimeRecord')
                         .updateOne({_id:result._id},updateData);
                 } else {
-                    console.log("データを取得できませんでした");
+                    console.log('データを取得できませんでした');
                 }
             } else {
                 console.log('エラーが発生しました。');
