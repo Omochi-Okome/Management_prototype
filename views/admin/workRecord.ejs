@@ -10,6 +10,9 @@
     <form action="/admin/home" method="GET">
         <button type="submit">管理者ホームに戻る</button>
     </form>
+    <form action="/admin/workRecordEdit">
+        <button type="submit">編集する</button>
+    </form>
     <table border="1">
         <thead>
             <tr>
@@ -32,8 +35,6 @@
                     <td><%
                         const startDateTime = new Date(`${startTime[i]}Z`);
                         const endDateTime = new Date(`${endTime[i]}Z`);
-                        console.log('startDateTime:', startDateTime);
-                        console.log('endDateTime:', endDateTime);
                         const diffTime = endDateTime - startDateTime;
                         const workTime = diffTime / 1000;
                         const hours = Math.floor(workTime / 3600);

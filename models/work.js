@@ -19,7 +19,7 @@ class CommonDBOperation {
           .find()
           .toArray()
           .then(data => {
-            console.log(data);
+            
             return data;
           })
       }
@@ -53,7 +53,6 @@ class recordStartWork {
                 employeeHourlyWage:this.employeeHourlyWage,
                 todayWage:this.todayWage
                 })
-                console.log(result);
             } catch(err) {
             console.log(err);
             }   
@@ -200,5 +199,44 @@ class calculateWage {
     }
 }
 
+class reCalculateWage {
+    constructor(collectionName){
+        this.collectionName = collectionName;
+    }
+    async recalculateTodayWage(employeeID) {
+        const DB = getDB();
+        try {
+            const result = await DB.collection(this.collectionName)
+                .findOne({employeeID:parseInt(employeeID)})
+                console.log('この私が確かめてやろう。result:'+result);
+                console.log('この私が確かめてやろう。result.startTime:'+result.startTime);
+                console.log('この私が確かめてやろう。result.endTime:'+result.endTime);
+                if(result && result.startTime &&result.endTime){
+                    const startTime = dayjs(result.startTime);
+                    const endTime = dayjs(result.endTime);
+                if (startTime.isValid() && endTime.isValid()) {
+                    const calculateWorkTime = endTime.diff(startTime,'minutes');
+                    const employeeMinutesWage = result.employeeHourlyWage/60;
+                    const todayWage = calculateWorkTime*employeeMinutesWage;
+                    const updateData = {
+                        $set: { todayWage: parseInt(todayWage)}
+                    };
 
-module.exports= {recordStartWork,recordEndWork,getWorkRecord,fetchName,fetchHourlyWage,calculateWage};
+                    await DB.collection(this.collectionName)
+                        .updateOne({_id:result._id},updateData);
+                } else {
+                    console.log("データを取得できませんでした");
+                }
+            } else {
+                console.log('エラーが発生しました。');
+            }
+            
+            } catch(err) {
+                console.log('エラーが発生。',err);
+        }
+    }
+}
+
+
+
+module.exports= {recordStartWork,recordEndWork,getWorkRecord,fetchName,fetchHourlyWage,calculateWage,reCalculateWage};

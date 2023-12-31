@@ -35,7 +35,7 @@ class CommonDBOperation {
           .find()
           .toArray()
           .then(data => {
-            console.log(data);
+            
           })
       }
 

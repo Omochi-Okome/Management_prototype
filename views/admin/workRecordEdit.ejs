@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <h1>労働記録</h1>
+    <form action="/admin/workRecord" method="GET">
+        <button type="submit">編集をやめる</button>
+    </form>
+    <form action="/admin/workRecordEdit/post" method="POST">
+        <button type="submit">編集を反映する</button>
+    
+    <table border="1">
+        <thead>
+            <tr>
+                <th></th>
+                <th>従業員氏名</th>
+                <th>従業員ID</th>
+                <th>出勤時刻</th>
+                <th>退勤時刻</th>
+                <th>勤務時間</th>
+                <th>給料</th>
+            </tr>
+        </thead>
+        <tbody>
+            <% for (let i = 0; i <= employeeID.length -1; i++) { %>
+                <tr>
+                    <td><input type="hidden" name="_id" value="<%= _id[i]%>"></td>
+                    <td><input type="hidden" name="employeeName" value="<%= employeeName[i]%>"><%= employeeName[i]%></td>
+                    <td><input type="hidden" name="employeeID" value="<%= employeeID[i] %>"><%= employeeID[i] %></td>
+                    <td>
+                        <%
+                            const startTimeValue = formattedStartTime === '' ? startTime[i] : formattedStartTime[i];
+                        %>
+                        <input type="datetime-local" name="formattedStartTime" value=<%=startTime[i] || formattedStartTime  %>>
+                    </td>
+                    <td>
+                        <%
+                            const endTimeValue = formattedEndTime === '' ? endTime[i] : formattedEndTime[i];  
+                        %>
+                        <input type="datetime-local" name="formattedEndTime" value=<%= endTime[i] || formattedEndTime %>></td>
+                    <td><%
+                        const startDateTime = new Date(`${startTime[i]}Z`);
+                        const endDateTime = new Date(`${endTime[i]}Z`);
+                        const diffTime = endDateTime - startDateTime;
+                        const workTime = diffTime / 1000;
+                        const hours = Math.floor(workTime / 3600);
+                        const minutes = Math.floor((workTime % 3600) / 60);
+                        const seconds = Math.floor(workTime % 60);
+                        const result =`${hours}時間${minutes}分${seconds}秒`;            
+                        %>
+                        <% if(result === 'NaN時間NaN分NaN秒'){ %>
+                            <%= "出勤中です" %>
+                        <% } else { %>
+                            <input type="hidden" name="workTime" value="<%= result %>"><%= result %>
+                        <% } %>
+                    </td>
+                    <td><input type="hidden" name="todayWage" value="<%= todayWage[i] %>"><%= todayWage[i] %>円</td>
+                </tr>
+            <% } %>
+        </tbody>
+    </table>
+</form>
+</body>
+</html>

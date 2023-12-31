@@ -1,6 +1,7 @@
 const {administrator} = require('../models/admin');
 const {attendanceRegistration} = require('../models/home');
-const {getWorkRecord} = require('../models/work');
+const {getWorkRecord,reCalculateWage} = require('../models/work');
+const {insertEditedRecord} = require('../models/edit');
 const dayjs = require('dayjs');
 const localizedFormat = require('dayjs/plugin/localizedFormat');
 dayjs.extend(localizedFormat);
@@ -82,4 +83,64 @@ exports.getWorkRecord = (req,res) => {
     .catch(err => {
         console.log(err)
     })
+}
+
+exports.getWorkRecordEdit = (req,res) => {
+    const collectionName = "workTimeRecord";
+    const workRecord = new getWorkRecord(collectionName);
+    workRecord.getWorkRecord()
+    .then(result => {
+        const _id = result.map(employee => employee._id);
+        const employeeNames = result.map(employee => employee.employeeName);
+        const employeeIDs = result.map(employee => employee.employeeID);
+        const startTimes = result.map(employee => employee.startTime);
+        const endTimes = result.map(employee => employee.endTime);
+        const todayWages = result.map(employee => employee.todayWage);
+        const formattedStartTimes = result.map(employee => dayjs(employee.startTime).format("YYYY年MM月DD日HH時mm分ss秒"));
+        const formattedEndTimes = result.map(employee => dayjs(employee.endTime).format("YYYY年MM月DD日HH時mm分ss秒"));
+        res.render('../views/admin/workRecordEdit',{
+            _id:_id,
+            employeeName:employeeNames,
+            employeeID:employeeIDs,
+            startTime:startTimes,
+            endTime:endTimes,
+            formattedStartTime:formattedStartTimes,
+            formattedEndTime:formattedEndTimes,
+            todayWage:todayWages,
+
+        })
+    })
+    .catch(err => {
+        console.log(err)
+    })
+}
+
+exports.postWorkRecordEdit = async(req,res) => {
+    const _id = req.body._id;
+    const employeeName = req.body.employeeName;
+    const employeeID = req.body.employeeID;
+    const formattedStartTime = req.body.formattedStartTime;
+    const formattedEndTime = req.body.formattedEndTime;
+    const workTime = req.body.workTime;
+    const todayWage = req.body.todayWage;
+    try{
+        for (let i = 0; employeeID && i <= employeeID.length - 1; i++) {
+            console.log("姿を見せなさい"+employeeID.length)
+            if(formattedEndTime[i] === ''){
+                formattedEndTime[i] = null;
+            }
+            const insertDate = new insertEditedRecord(_id[i],formattedStartTime[i],formattedEndTime[i]);
+            await insertDate.editedRecord();
+            const calculateTodayWage = new reCalculateWage('workTimeRecord');
+            await calculateTodayWage.recalculateTodayWage(employeeID[i]);
+        }
+        
+        console.log('多分更新された');
+    } catch(err) {
+        console.log(err);
+    }
+   
+          
+    console.log('////////////////////');
+    res.redirect('/admin/workRecord');
 }
