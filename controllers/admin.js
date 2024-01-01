@@ -1,6 +1,6 @@
 const {administrator} = require('../models/admin');
 const {attendanceRegistration} = require('../models/home');
-const {getWorkRecord,reCalculateWage} = require('../models/work');
+const {getWorkRecord,reCalculateWage,getSpecificWorkRecord} = require('../models/work');
 const {insertEditedRecord} = require('../models/edit');
 const dayjs = require('dayjs');
 const localizedFormat = require('dayjs/plugin/localizedFormat');
@@ -133,4 +133,44 @@ exports.postWorkRecordEdit = async(req,res) => {
         console.log(err);
     }
     res.redirect('/admin/workRecord');
+}
+
+//検索条件の送信
+exports.postPayrollReserch = (req,res) => {
+    const employeeName = req.body.employeeName;
+    const inputMonth = req.body.inputMonth;
+    
+    
+    console.log(employeeName,inputMonth);
+    console.log('受け取りました');
+    res.redirect(`/admin/WorkRecord/search?employeeName=${employeeName}&inputMonth=${inputMonth}`);
+}
+
+exports.getWorkRecordSearch = (req,res) => {
+    const employeeName = req.query.employeeName;
+    const inputMonth = req.query.inputMonth;
+    console.log('氏名:'+employeeName+'年月:'+inputMonth);
+    const workRecord = new getSpecificWorkRecord();
+    workRecord.getSpecificWorkRecord(employeeName,inputMonth)
+    .then(result => {
+        const _ids = result.map(employee => employee._id);
+        const employeeNames = result.map(employee => employee.employeeName);
+        const employeeIDs = result.map(employee => employee.employeeID);
+        const startTimes = result.map(employee => employee.startTime);
+        const endTimes = result.map(employee => employee.endTime);
+        const todayWages = result.map(employee => employee.todayWage);
+        const formattedStartTimes = result.map(employee => dayjs(employee.startTime).format('YYYY年MM月DD日HH時mm分'));
+        const formattedEndTimes = result.map(employee => dayjs(employee.endTime).format('YYYY年MM月DD日HH時mm分'));
+        res.render('../views/admin/payrollSearchResult.ejs',{
+            _id: _ids,
+            employeeName:employeeNames,
+            employeeID:employeeIDs,
+            startTime:startTimes,
+            endTime:endTimes,
+            formattedStartTime:formattedStartTimes,
+            formattedEndTime:formattedEndTimes,
+            todayWage:todayWages,
+        });
+    })
+    
 }

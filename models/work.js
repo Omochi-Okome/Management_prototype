@@ -196,6 +196,32 @@ class reCalculateWage {
     }
 }
 
+//名前と日時から特定して返す
+class getSpecificWorkRecord {
+    getSpecificWorkRecord(employeeName,inputMonth) {
+        this.inputMonth = inputMonth;
+        this.employeeName = employeeName;
+        const db = getDB();
+        return db.collection('workTimeRecord')
+            .find({
+                employeeName:employeeName,
+                startTime:{$regex: inputMonth}
+            })
+            .toArray()
+            .then(data => {
+                return data;
+            })
+    }
+}
 
 
-module.exports= {recordStartWork,recordEndWork,getWorkRecord,fetchName,fetchHourlyWage,calculateWage,reCalculateWage};
+module.exports= {
+    recordStartWork,
+    recordEndWork,
+    getWorkRecord,
+    fetchName,
+    fetchHourlyWage,
+    calculateWage,
+    reCalculateWage,
+    getSpecificWorkRecord
+};

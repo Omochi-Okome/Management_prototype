@@ -16,4 +16,8 @@ router.get('/admin/workRecordEdit',adminController.getWorkRecordEdit);
 
 router.post('/admin/workRecordEdit/post',adminController.postWorkRecordEdit);
 
+router.post('/admin/postPayrollReserch',adminController.postPayrollReserch);
+
+router.get('/admin/WorkRecord/search',adminController.getWorkRecordSearch);
+
 module.exports = router;
