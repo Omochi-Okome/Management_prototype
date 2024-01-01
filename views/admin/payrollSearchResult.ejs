@@ -6,9 +6,12 @@
     <title>Document</title>
 </head>
 <body>
+    <h1>検索結果</h1>
     <form action="/admin/WorkRecord" method="GET">
         <button type="submit">労働データに戻る</button>
     </form>
+    <% if (employeeID.length >0){ %>
+    <h1><%= employeeName[0]%>さんのデータ</h1>
     <table border="1">
         <thead>
             <tr>
@@ -21,7 +24,9 @@
             </tr>
         </thead>
         <tbody>
+            <% let totalWage = 0 %>
             <% for (let i = 0; i <= employeeID.length -1; i++) { %>
+                <% totalWage += todayWage[i] %>
                 <tr>
                     <td><%= employeeName[i]%></td>
                     <td><%= employeeID[i] %></td>
@@ -49,5 +54,9 @@
             <% } %>
         </tbody>
     </table>
+    <h1>支払総額<%= totalWage %>円</h1>
+    <% } else { %>
+        <h1>該当する期間のデータはありません</h1>
+    <% } %>
 </body>
 </html>
