@@ -7,33 +7,34 @@
     <title>出退勤管理画面</title>
 </head>
 <body>
+    <div class="p-3 mb-2 bg-primary text-white">
+        <header>
+            <h1>勤怠マン(仮称)</h1>
+        </header>
+    </div>
+
+    <div class="d-grid gap-2 col-6 mx-auto">
+        <div>
+            <form action="/admin" method="GET">
+                <button class="btn btn-secondary" type="submit" aria-label="管理者用">管理者用</button>
+            </form>
+        </div>
     
-    <div class="d-grid gap-2 col-6 mx-auto">
-        <h1 class="h1">出退勤管理</h1>
-    </div>
+        <div>
+            <form action="/input" method="POST">
+                <label for="exampleFormControlInput1" class="form-label">IDを入力してください。</label>
+                <input type="text" class="form-control" id="exampleFormControlInput1" placeholder="ID" name="EmployeeID">
 
-    <div class="d-grid gap-2 col-6 mx-auto">
-        <form action="/admin" method="GET">
-            <button class="btn btn-secondary" type="submit" aria-label="管理者用">管理者用</button>
-        </form>
+                <label for="inputPassword5" class="form-label">パスワードを入力してください。</label>
+                <!-- aria-labelledbyについては要確認。アクセシビリティ関連 -->
+                <input type="password"  class="form-control" id="inputPassword5" name="EmployeePassword" aria-labelledby="passwordHelpBlock" placeholder="パスワード" >
+
+                <button class="btn btn-primary" type="submit" name ="action" value="startWork" aria-label="出勤する">出勤する</button>
+                <button class="btn btn-primary" type="sunmit" name ="action" value="break" aria-label="休憩する">休憩する</button>
+                <button class="btn btn-primary" type="submit" name ="action" value="endWork" aria-label="退勤する">退勤する</button>
+            </form>
+        </div>
     </div>
     
-    <div class="d-grid gap-2 col-6 mx-auto">
-        <form action="/input" method="POST">
-            
-            <label for="exampleFormControlInput1" class="form-label">IDを入力してください。</label>
-            <input type="text" class="form-control" id="exampleFormControlInput1" placeholder="ID" name="EmployeeID">
-
-            <label for="inputPassword5" class="form-label">パスワードを入力してください。</label>
-            <!-- aria-labelledbyについては要確認。アクセシビリティ関連 -->
-            <input type="password"  class="form-control" id="inputPassword5" name="EmployeePassword" aria-labelledby="passwordHelpBlock" placeholder="パスワード" >
-
-            <button class="btn btn-primary" type="submit" name ="action" value="startWork" aria-label="出勤する">出勤する</button>
-           
-            <button class="btn btn-primary" type="sunmit" name ="action" value="break" aria-label="休憩する">休憩する</button>
-           
-            <button class="btn btn-primary" type="submit" name ="action" value="endWork" aria-label="退勤する">退勤する</button>
-        </form>
-    </div>
 </body>
 </html>

@@ -4,34 +4,56 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>従業員データ</title>
-    <link rel="stylesheet" href="../../public/employeeInformation.css">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
 </head>
+
 <body>
-    <h1>従業員データ</h1>
-    <form action="/admin/home" method="GET">
-        <button type="submit">管理者ホームに戻る</button>
-    </form>
-    <table border="1">
-        <thead>
-            <tr>
-                <th>従業員氏名</th>
-                <th>従業員ID</th>
-                <th>従業員パスワード</th>
-                <th>従業員の時給</th>
-            </tr>
-        </thead>
-        <tbody>
-            <% for (let i = 0; i <= employeeName.length -1; i++) { %>
-                <tr>
-                    <td><%= employeeName[i] %></td>
-                    <td><%= employeeID[i] %></td>
-                    <td><%= employeePassword[i] %></td>
-                    <td><%= employeeHourlyWage[i] %>円</td>
-                </tr>
-            <% } %>
-            
-        </tbody>
-    </table>
-    <td>計:<%= employeeName.length %>名</td>
+    
+    <div class="p-3 mb-2 bg-primary text-white">
+        <header>
+            <h1>勤怠マン(仮称)管理者専用</h1>
+        </header>
+    </div>
+
+    <div class="d-grid gap-2 col-6 mx-auto">
+        <div>
+            <form action="/admin/home" method="GET">
+                <button class="btn btn-link" type="submit">管理者ホームに戻る</button>
+            </form>
+        </div>
+
+        <div>
+            <h1>従業員データ</h1>
+        </div>
+
+        <div>    
+            <table class="table table-striped table-bordered">
+                <thead>
+                    <tr>
+                        <th scope="col">従業員氏名</th>
+                        <th scope="col">従業員ID</th>
+                        <th scope="col">従業員パスワード</th>
+                        <th scope="col">従業員の時給</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <% for (let i = 0; i <= employeeName.length -1; i++) { %>
+                        <tr>
+                            <td><%= employeeName[i] %></td>
+                            <td><%= employeeID[i] %></td>
+                            <td><%= employeePassword[i] %></td>
+                            <td><%= employeeHourlyWage[i] %>円</td>
+                        </tr>
+                    <% } %>
+                </tbody>
+            </table>
+        </div>
+
+        <div>    
+            <td>計:<%= employeeName.length %>名</td>
+        </div>
+
+    </div>
+
 </body>
 </html>
