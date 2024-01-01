@@ -3,21 +3,22 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
     <title>管理者ホーム</title>
 </head>
 <body>
-    <div>
+    <div class="d-grid gap-2 col-6 mx-auto">
         <h1>出退勤管理</h1>
         <form action="/" method="GET">
-            <button type="submit">出勤退管理に戻る</button>
+            <button class="btn btn-link" type="submit">出勤退管理に戻る</button>
         </form>
     </div>
-    <div>
+    <div class="d-grid gap-2 col-6 mx-auto">
         <form action="/admin/employeeInformation">
-            <button type="submit">従業員のデータを見る</button>
+            <button class="btn btn-primary" type="submit">従業員のデータを見る</button>
         </form>
         <form action="/admin/workRecord">
-            <button type="submit">労働データを見る</button>
+            <button class="btn btn-primary" type="submit">労働データを見る</button>
         </form>
     </div>
 </body>
