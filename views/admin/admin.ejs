@@ -5,6 +5,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
     <title>管理者画面ログイン</title>
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            var messageElement = document.querySelector('div.alert-warning');
+            if (messageElement && messageElement.innerText.trim() !== '') {
+                setTimeout(function() {
+                    messageElement.style.display = 'none';
+                }, 5000);
+            }
+        });
+    </script>
 </head>
 
 <body>
@@ -23,7 +33,7 @@
 
     <div class="d-grid gap-2 col-6 mx-auto">
         <form action="/adminLogin" method="POST">
-            <label for="exampleFormControlInput1" class="form-label">管理者IDを入力してください。</label>
+            <label for="exampleFormControlInput1" class="form-label">管理者IDを入力してください。(半角数字)</label>
             <input type="text" class="form-control" id="exampleFormControlInput1" placeholder="ID" name="adminID">
             
             <label for="inputPassword5" class="form-label">管理者パスワードを入力してください。</label>
@@ -31,9 +41,9 @@
             
             <button class="btn btn-primary" aria-label="ログインする" type="submit">ログインする</button>
         </form>
-    
-        <div>
-            <h1><%= message %></h1>
+        
+        <div class=" alert-warning" role="alert">
+            <h1 class="message"><%= message %></h1>
         </div>
     </div>
 </body>

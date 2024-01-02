@@ -141,8 +141,6 @@ exports.postWorkRecordEdit = async(req,res) => {
 exports.postPayrollReserch = (req,res) => {
     const employeeName = req.body.employeeName;
     const inputMonth = req.body.inputMonth;
-    console.log(employeeName,inputMonth);
-    console.log('受け取りました');
     res.redirect(`/admin/WorkRecord/search?employeeName=${employeeName}&inputMonth=${inputMonth}`);
 }
 

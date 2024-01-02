@@ -36,7 +36,7 @@ exports.postAttendance = async(req,res) => {
                const checkResult = await recordTime.writeStartTime();
                res.redirect(`/?message=${checkResult}`);
             } else {
-                res.redirect(`/?message=IDかパスワードが誤っています`);
+                res.redirect(`/?message=IDかパスワードが正しくありません。`);
             }
         }
         else if(action == 'break') {
@@ -53,7 +53,7 @@ exports.postAttendance = async(req,res) => {
                 res.redirect(`/?message=${checkResult}`);
                 await calculateTodayWage.calculateTodayWage(employeeID);   
             } else {
-                res.redirect(`/?message=IDかパスワードが誤っています`);
+                res.redirect(`/?message=IDかパスワードが正しくありません。`);
             }
         }
 

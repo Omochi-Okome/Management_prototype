@@ -5,6 +5,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
     <title>労働データ</title>
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            var messageElement = document.querySelector('div.alert-warning');
+            if (messageElement && messageElement.innerText.trim() !== '') {
+                setTimeout(function() {
+                    messageElement.style.display = 'none';
+                }, 5000);
+            }
+        });
+    </script>
 </head>
 <body>
 
@@ -40,7 +50,7 @@
                 <input type="month" name="inputMonth">
                 <button class="btn btn-primary" type="submit">検索する</button>
             </form>
-            <div>
+            <div class="alert-warning">
                 <h1><%= message %></h1>
             </div>
         </div>
