@@ -31,29 +31,46 @@
                 <button class="btn btn-link" type="submit">管理者ホームに戻る</button>
             </form>
         </div>
-    
-        <div class="dropdown">
-            <form action="/admin/postPayrollReserch" method="POST">
-                <select class="form-control" name="employeeName">
-                    <option value="">対象の従業員を選んでください</option>
-                    <option value="恵比寿梨沙">恵比寿梨沙</option>
-                    <option value="五反田一郎">五反田一郎</option>
-                    <option value="大崎太郎">大崎太郎</option>
-                    <option value="渋谷花子">渋谷花子</option>
-                    <option value="品川大介">品川大介</option>
-                    <option value="田町はな">田町はな</option>
-                    <option value="目黒浩介">目黒浩介</option>
-                    <option value="原宿加奈">原宿加奈</option>
-                    <option value="佐々木海斗">佐々木海斗</option>
-                    <option value="新宿恵美">新宿恵美</option>
-                </select>
-                <input type="month" name="inputMonth">
-                <button class="btn btn-primary" type="submit">検索する</button>
-            </form>
+
+            <div class="grid text-center">
+                <div class="g-col-md-4">
+                    <div class="dropdown">
+                        <form action="/admin/postPayrollReserch" method="POST">
+                            <select class="form-control" name="employeeName">
+                                <option value="">対象の従業員を選んでください</option>
+                                <option value="恵比寿梨沙">恵比寿梨沙</option>
+                                <option value="五反田一郎">五反田一郎</option>
+                                <option value="大崎太郎">大崎太郎</option>
+                                <option value="渋谷花子">渋谷花子</option>
+                                <option value="品川大介">品川大介</option>
+                                <option value="田町はな">田町はな</option>
+                                <option value="目黒浩介">目黒浩介</option>
+                                <option value="原宿加奈">原宿加奈</option>
+                                <option value="佐々木海斗">佐々木海斗</option>
+                                <option value="新宿恵美">新宿恵美</option>
+                            </select>
+                </div>
+                </div>
+                            <div class="g-col-md-4">
+                                <input type="month" name="inputMonth">
+                            </div>
+                        
+                            <div class="g-col-md-4">
+                            <button class="btn btn-primary" type="submit">検索する</button>
+                        </div></div>
+                        </form>
+                
+                <div class=""> 
+                    <div class="">
+                        <form action="/admin/workRecordEdit">
+                            <button class="btn btn-warning" type="submit">労働データを編集する</button>
+                        </form>
+                    </div>
+                </div>
+
             <div class="alert-warning">
                 <h1><%= message %></h1>
             </div>
-        </div>
     
         <div>
             <table class="table table-striped table-bordered">
@@ -97,11 +114,6 @@
             </table>
         </div>
 
-        <div>
-            <form action="/admin/workRecordEdit">
-                <button class="btn btn-primary" type="submit">労働データを編集する</button>
-            </form>
-        </div>
     </div>
 </body>
 </html>
