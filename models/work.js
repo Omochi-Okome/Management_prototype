@@ -16,6 +16,7 @@ class recordStartWork {
     async writeStartTime() {
         const DB = getDB();
         const collection = DB.collection('workTimeRecord');
+        let checkResult;
 
         const ngData = await collection.findOne({
             employeeID:this.employeeID,
@@ -31,12 +32,15 @@ class recordStartWork {
                 employeeHourlyWage:this.employeeHourlyWage,
                 todayWage:this.todayWage
                 });
+                checkResult = '正常に出勤登録ができました！'
             } catch(err) {
             console.log(err);
             }   
         } else {
+            checkResult = 'すでに出勤しています。'
             console.log('すでに出勤しています');
         }   
+        return checkResult;
     }
 }
 
@@ -49,6 +53,7 @@ class recordEndWork {
     async writeEndTime() {
         const DB = getDB();
         const collection = DB.collection('workTimeRecord');
+        let checkResult;
         try{
             const findStartTime = await collection.findOne({
                 employeeID:parseInt(this.employeeID),
@@ -64,16 +69,18 @@ class recordEndWork {
             };
 
             const result = await collection.updateOne({ employeeID:parseInt(this.employeeID),endTime:null }, updateData);
-
             if (result.modifiedCount >0) {
                 console.log('更新に成功しました');
+                checkResult ='今日もお疲れ様でした！'
             } else {
                 console.log('出勤のデータがありません。');
+                checkResult = '出勤のデータがありません。';
             }
         } catch(err) {
             console.log(err);
         }
-    }
+    return checkResult;
+}
 }
 
 //労働記録の取得

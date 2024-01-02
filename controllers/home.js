@@ -4,7 +4,10 @@ const {recordStartWork,recordEndWork,fetchName,fetchHourlyWage,calculateWage} = 
 
 //ホーム画面表示
 exports.getHome = (req,res) => {
-    res.render('../views/home.ejs')
+    const checkResult = req.query.message;
+    res.render('../views/home.ejs',{
+        message:checkResult
+    })
 }
 
 //従業員IDとパスワード送信
@@ -23,28 +26,38 @@ exports.postAttendance = async(req,res) => {
         
         let result;
         let recordTime;
+
         if(action === 'startWork') {
-            const attendance = new attendanceRegistration(employeeID,employeePassword)
+            const attendance = new attendanceRegistration(employeeID,employeePassword);
             recordTime = new recordStartWork(nowTime,employeeName,employeeID,employeeHourlyWage);
             result = await attendance.checkIDPassword();
-        }
-        if(result) {
-            await recordTime.writeStartTime(); 
+            console.log('どうなっとるんや'+result);
+        
+            if(result) {
+               const checkResult = await recordTime.writeStartTime();
+               res.redirect(`/?message=${checkResult}`);
+            } else {
+                res.redirect(`/?message=IDかパスワードが誤っています`);
+            }
         }
         else if(action == 'break') {
-            console.log('工事中');
+            res.redirect(`/?message=工事中です`);
         }
+
         else if(action === 'endWork') {
             const attendance = new attendanceRegistration(employeeID,employeePassword)
             const recordTime = new recordEndWork(employeeID,nowTime);
             const calculateTodayWage = new calculateWage();
             const result = await attendance.checkIDPassword();
             if(result) {
-                await recordTime.writeEndTime();
-                await calculateTodayWage.calculateTodayWage(employeeID);
+                const checkResult = await recordTime.writeEndTime();
+                res.redirect(`/?message=${checkResult}`);
+                await calculateTodayWage.calculateTodayWage(employeeID);   
+            } else {
+                res.redirect(`/?message=IDかパスワードが誤っています`);
             }
         }
-        res.redirect('/');
+
     } catch(err) {
         console.log(err);
         res.redirect('/');

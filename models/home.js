@@ -10,6 +10,7 @@ class attendanceRegistration {
     checkIDPassword(){
         const DB = getDB();
         const collection = DB.collection('EmployeeData');
+        let checkResult;
         return collection
             .find({employeeID:parseInt(this.employeeID),employeePassword:parseInt(this.employeePassword)})
             .toArray()
@@ -22,7 +23,8 @@ class attendanceRegistration {
                     console.log(`時給:${data[0].employeeHourlyWage}円`);
                     return true;
                 } else {
-                    console.log('パスワードかIDが誤っています。');
+                    console.log('パスワードかIDが誤aっています。');
+                    checkResult ='パスワードかIDが誤っています。'
                     return false;
                 }
             })
