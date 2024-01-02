@@ -6,7 +6,7 @@ class administrator {
         this.administratorID = administratorID;
         this.administratorPassword = administratorPassword;
     }
-
+    
     inspectDB(){
         const DB = getDB();
         const collection = DB.collection('administratorData');

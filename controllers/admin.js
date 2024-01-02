@@ -8,26 +8,27 @@ dayjs.extend(localizedFormat);
 
 //管理者ログイン画面
 exports.getLoginScreen = (req,res) => {
-    res.render('../views/admin/admin.ejs');
+    res.render('../views/admin/admin.ejs',{
+        message:req.query.message
+    });
 }
 
 //入力した管理者IDとパスワードを送信
-exports.postLogin = (req,res) => {
+exports.postLogin = async(req,res) => {
     const administratorID = req.body.adminID;
     const administratorPassword = req.body.adminPassword;
-    const attendance = new administrator(administratorID,administratorPassword);
-    attendance.inspectDB()
-    .then(loginResult => {
-        if(loginResult) {
+    const attendance =  new administrator(administratorID,administratorPassword);
+
+    try{    
+        const result = await attendance.inspectDB();
+        if(result) {
             res.redirect('/admin/home');
         } else {
-            res.redirect('/admin');
+            res.redirect('/admin?message=管理者IDかパスワードが誤っています');
         }
-    })
-    .catch(err => {
+    } catch(err) {
         console.log(err);
-        res.redirect('/admin');
-    })
+    }
 }
 
 //ログイン後の管理者画面

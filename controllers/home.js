@@ -31,7 +31,6 @@ exports.postAttendance = async(req,res) => {
             const attendance = new attendanceRegistration(employeeID,employeePassword);
             recordTime = new recordStartWork(nowTime,employeeName,employeeID,employeeHourlyWage);
             result = await attendance.checkIDPassword();
-            console.log('どうなっとるんや'+result);
         
             if(result) {
                const checkResult = await recordTime.writeStartTime();
