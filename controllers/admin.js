@@ -62,6 +62,7 @@ exports.getWorkRecord = (req,res) => {
     const workRecord = new getWorkRecord();
     workRecord.getWorkRecord()
     .then(result => {
+        const message = req.query.message;
         const employeeNames = result.map(employee => employee.employeeName);
         const employeeIDs = result.map(employee => employee.employeeID);
         const startTimes = result.map(employee => employee.startTime);
@@ -77,7 +78,7 @@ exports.getWorkRecord = (req,res) => {
             formattedStartTime:formattedStartTimes,
             formattedEndTime:formattedEndTimes,
             todayWage:todayWages,
-
+            message:message
         })
     })
     .catch(err => {
@@ -140,38 +141,41 @@ exports.postWorkRecordEdit = async(req,res) => {
 exports.postPayrollReserch = (req,res) => {
     const employeeName = req.body.employeeName;
     const inputMonth = req.body.inputMonth;
-    
-    
     console.log(employeeName,inputMonth);
     console.log('受け取りました');
     res.redirect(`/admin/WorkRecord/search?employeeName=${employeeName}&inputMonth=${inputMonth}`);
 }
 
-exports.getWorkRecordSearch = (req,res) => {
+exports.getWorkRecordSearch = async(req,res) => {
     const employeeName = req.query.employeeName;
     const inputMonth = req.query.inputMonth;
     console.log('氏名:'+employeeName+'年月:'+inputMonth);
     const workRecord = new getSpecificWorkRecord();
-    workRecord.getSpecificWorkRecord(employeeName,inputMonth)
-    .then(result => {
-        const _ids = result.map(employee => employee._id);
-        const employeeNames = result.map(employee => employee.employeeName);
-        const employeeIDs = result.map(employee => employee.employeeID);
-        const startTimes = result.map(employee => employee.startTime);
-        const endTimes = result.map(employee => employee.endTime);
-        const todayWages = result.map(employee => employee.todayWage);
-        const formattedStartTimes = result.map(employee => dayjs(employee.startTime).format('YYYY年MM月DD日HH時mm分'));
-        const formattedEndTimes = result.map(employee => dayjs(employee.endTime).format('YYYY年MM月DD日HH時mm分'));
-        res.render('../views/admin/payrollSearchResult.ejs',{
-            _id: _ids,
-            employeeName:employeeNames,
-            employeeID:employeeIDs,
-            startTime:startTimes,
-            endTime:endTimes,
-            formattedStartTime:formattedStartTimes,
-            formattedEndTime:formattedEndTimes,
-            todayWage:todayWages,
-        });
-    })
-    
+    try{
+        if(employeeName !=='' & inputMonth !== ''){
+            const result = await workRecord.getSpecificWorkRecord(employeeName,inputMonth);
+            const _ids =  result.map(employee => employee._id);
+            const employeeNames = result.map(employee => employee.employeeName);
+            const employeeIDs = result.map(employee => employee.employeeID);
+            const startTimes = result.map(employee => employee.startTime);
+            const endTimes = result.map(employee => employee.endTime);
+            const todayWages = result.map(employee => employee.todayWage);
+            const formattedStartTimes = result.map(employee => dayjs(employee.startTime).format('YYYY年MM月DD日HH時mm分'));
+            const formattedEndTimes = result.map(employee => dayjs(employee.endTime).format('YYYY年MM月DD日HH時mm分'));
+            res.render('../views/admin/payrollSearchResult.ejs',{
+                _id: _ids,
+                employeeName:employeeNames,
+                employeeID:employeeIDs,
+                startTime:startTimes,
+                endTime:endTimes,
+                formattedStartTime:formattedStartTimes,
+                formattedEndTime:formattedEndTimes,
+                todayWage:todayWages,
+            })
+        } else {
+            res.redirect('/admin/WorkRecord?message=従業員氏名と日時の両方を選択してください');
+        }        
+    } catch(err) {
+      console.log(err);  
+    }
 }
