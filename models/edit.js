@@ -36,4 +36,21 @@ class insertEditedRecord{
     }
 }
 
-module.exports = {insertEditedRecord};
+//チェックが入った対象のデータを削除する
+class deleteSpecificRecord {
+    async deleteRecord(_id){
+        console.log('_idは'+_id);
+        const DB = getDB();
+        const collection = DB.collection('workTimeRecord')
+        try{
+            const result = await collection.deleteOne({
+                _id:new mongoDB.ObjectId(_id)
+            });
+        } catch(err) {
+            console.log(err);
+        }
+        
+    }
+}
+
+module.exports = {insertEditedRecord,deleteSpecificRecord};

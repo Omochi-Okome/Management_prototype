@@ -23,7 +23,7 @@
         
         <div>
             <form action="/admin/workRecordEdit/post" method="POST">
-                <button class="btn btn-danger" type="submit">編集を反映する</button>
+                <button class="btn btn-warning" type="submit">編集を反映する</button>
                 <table class="table table-striped table-bordered">
                     <thead>
                         <tr>
@@ -69,6 +69,14 @@
                                     <% } %>
                                 </td>
                                 <td><input type="hidden" name="todayWage" value="<%= todayWage[i] %>"><%= todayWage[i] %>円</td>
+                                <td>
+                                    <div>
+                                        <label for="<%=[i]%>">
+                                        <input type="checkbox" id="<%=[i]%>" name="checked<%= i %>" class="btn btn-danger"/>削除する
+                                        </label>
+                                    </div>
+                                    
+                                </td>
                             </tr>
                         <% } %>
                     </tbody>
@@ -76,6 +84,5 @@
             </form>
         </div>    
     </div>
-
 </body>
 </html>

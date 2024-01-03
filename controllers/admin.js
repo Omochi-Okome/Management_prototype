@@ -1,7 +1,7 @@
 const {administrator} = require('../models/admin');
 const {attendanceRegistration} = require('../models/home');
 const {getWorkRecord,reCalculateWage,getSpecificWorkRecord} = require('../models/work');
-const {insertEditedRecord} = require('../models/edit');
+const {insertEditedRecord,deleteSpecificRecord} = require('../models/edit');
 const dayjs = require('dayjs');
 const localizedFormat = require('dayjs/plugin/localizedFormat');
 dayjs.extend(localizedFormat);
@@ -118,25 +118,37 @@ exports.getWorkRecordEdit = (req,res) => {
 
 //編集した労働データの送信
 exports.postWorkRecordEdit = async(req,res) => {
+    let checkboxValue = [];
     const _id = req.body._id;
     const formattedStartTime = req.body.formattedStartTime;
     const formattedEndTime = req.body.formattedEndTime;
+    console.log(checkboxValue+"どうだ")
     try{
         for (let i = 0; _id && i <= _id.length - 1; i++) {
             if(formattedEndTime[i] === ''){
                 formattedEndTime[i] = null;
             }
-            const insertDate = new insertEditedRecord(_id[i],formattedStartTime[i],formattedEndTime[i]);
-            await insertDate.editedRecord();
-            const calculateTodayWage = new reCalculateWage();
-            await calculateTodayWage.recalculateTodayWage(_id[i]);
+                console.log('レフトヒット')
+                const insertDate = new insertEditedRecord(_id[i],formattedStartTime[i],formattedEndTime[i]);
+                await insertDate.editedRecord();
+                const calculateTodayWage = new reCalculateWage();
+                await calculateTodayWage.recalculateTodayWage(_id[i]);
+            }
+        for (let i = 0; _id && i <= _id.length -1; i++){
+            console.log(req.body[`checked${i}`]);
+            checkboxValue.push(req.body[`checked${i}`]);
         }
-    } catch(err) {
+        for (let i = 0;  _id && i <= _id.length -1; i++){
+            if(checkboxValue[i] === 'on'){
+                const deleteData = new deleteSpecificRecord();
+                await deleteData.deleteRecord(_id[i]);
+            } 
+        }
+        } catch(err) {
         console.log(err);
     }
     res.redirect('/admin/workRecord');
 }
-
 //検索条件の送信
 exports.postPayrollReserch = (req,res) => {
     const employeeName = req.body.employeeName;
