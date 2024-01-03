@@ -36,7 +36,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <% for (let i = 0; i <= employeeID.length -1; i++) { %>
+                        <% for (let i = 0; i < employeeID.length; i++) { %>
                             <tr>
                                 <input type="hidden" name="_id" value="<%= _id[i]%>">
                                 <td><input type="hidden" name="employeeName" value="<%= employeeName[i]%>"><%= employeeName[i]%></td>

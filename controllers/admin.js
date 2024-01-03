@@ -122,28 +122,44 @@ exports.postWorkRecordEdit = async(req,res) => {
     const _id = req.body._id;
     const formattedStartTime = req.body.formattedStartTime;
     const formattedEndTime = req.body.formattedEndTime;
-    console.log(checkboxValue+"どうだ")
+    const _idArray = Array.isArray(_id) ? _id : [_id];
     try{
-        for (let i = 0; _id && i <= _id.length - 1; i++) {
+        //_idArray.length === 1の時に発生するバグを防ぐため分離する
+        if(_idArray.length > 1){
+            for (let i = 0; i < _idArray.length; i++) {
             if(formattedEndTime[i] === ''){
                 formattedEndTime[i] = null;
             }
-                console.log('レフトヒット')
                 const insertDate = new insertEditedRecord(_id[i],formattedStartTime[i],formattedEndTime[i]);
                 await insertDate.editedRecord();
                 const calculateTodayWage = new reCalculateWage();
                 await calculateTodayWage.recalculateTodayWage(_id[i]);
             }
-        for (let i = 0; _id && i <= _id.length -1; i++){
-            console.log(req.body[`checked${i}`]);
-            checkboxValue.push(req.body[`checked${i}`]);
+            for (let i = 0; i < _idArray.length; i++){
+                checkboxValue.push(req.body[`checked${i}`]);
+            }
+            for (let i = 0; i < _idArray.length; i++){
+                if(checkboxValue[i] === 'on'){
+                    const deleteData = new deleteSpecificRecord();
+                    await deleteData.deleteRecord(_id[i]);
+                } 
+            }
+        } else {
+            if(formattedEndTime === ''){
+                formattedEndTime = null;
+            }
+                const insertDate = new insertEditedRecord(_id,formattedStartTime,formattedEndTime);
+                await insertDate.editedRecord();
+                const calculateTodayWage = new reCalculateWage();
+                await calculateTodayWage.recalculateTodayWage(_id);
+                checkboxValue.push(req.body[`checked${0}`]);
+                console.log(JSON.stringify(checkboxValue))
+                if(checkboxValue[0] === 'on'){;
+                    const deleteData = new deleteSpecificRecord();
+                    await deleteData.deleteRecord(_id);
+                } 
         }
-        for (let i = 0;  _id && i <= _id.length -1; i++){
-            if(checkboxValue[i] === 'on'){
-                const deleteData = new deleteSpecificRecord();
-                await deleteData.deleteRecord(_id[i]);
-            } 
-        }
+
         } catch(err) {
         console.log(err);
     }
@@ -181,6 +197,7 @@ exports.getWorkRecordSearch = async(req,res) => {
                 formattedStartTime:formattedStartTimes,
                 formattedEndTime:formattedEndTimes,
                 todayWage:todayWages,
+                inputMonth:inputMonth,
             })
         } else {
             res.redirect('/admin/WorkRecord?message=従業員氏名と日時の両方を選択してください');
@@ -188,4 +205,99 @@ exports.getWorkRecordSearch = async(req,res) => {
     } catch(err) {
       console.log(err);  
     }
+}
+
+
+exports.postPayrollReserchEdit = (req,res) => {
+    const employeeName = req.body.employeeName;
+    const inputMonth = req.body.inputMonth;
+    res.redirect(`/admin/WorkRecord/getPayrollRerchEdit?employeeName=${employeeName}&inputMonth=${inputMonth}`);
+}
+
+//絞り込んだ後編集
+exports.getPayrollReserchEdit = async(req,res) => {
+    const employeeName = req.query.employeeName;
+    const inputMonth = req.query.inputMonth;
+    console.log('氏名:'+employeeName+'年月:'+inputMonth);
+    const workRecord = new getSpecificWorkRecord();
+    try{
+        if(employeeName !=='' & inputMonth !== ''){
+            const result = await workRecord.getSpecificWorkRecord(employeeName,inputMonth);
+            const _ids =  result.map(employee => employee._id);
+            const employeeNames = result.map(employee => employee.employeeName);
+            const employeeIDs = result.map(employee => employee.employeeID);
+            const startTimes = result.map(employee => employee.startTime);
+            const endTimes = result.map(employee => employee.endTime);
+            const todayWages = result.map(employee => employee.todayWage);
+            const formattedStartTimes = result.map(employee => dayjs(employee.startTime).format('YYYY年MM月DD日HH時mm分'));
+            const formattedEndTimes = result.map(employee => dayjs(employee.endTime).format('YYYY年MM月DD日HH時mm分'));
+            res.render('../views/admin/payrollSearchResultEdit.ejs',{
+                _id: _ids,
+                employeeName:employeeNames,
+                employeeID:employeeIDs,
+                startTime:startTimes,
+                endTime:endTimes,
+                formattedStartTime:formattedStartTimes,
+                formattedEndTime:formattedEndTimes,
+                todayWage:todayWages,
+                inputMonth:inputMonth,
+            })
+        } else {
+            res.redirect('/admin/WorkRecord?message=従業員氏名と日時の両方を選択してください');
+        }        
+    } catch(err) {
+      console.log(err);  
+    }
+}
+
+//絞り込んだ後の編集データを送信
+exports.postSpecificEditedData = async(req,res) => {
+    let checkboxValue = [];
+    const _id = req.body._id;
+    const formattedStartTime = req.body.formattedStartTime;
+    const formattedEndTime = req.body.formattedEndTime;
+    const specificEmployeeName = req.body.specificEmployeeName;
+    const specificInputMonth = req.body.specificInputMonth;
+    const _idArray = Array.isArray(_id) ? _id : [_id];;
+    try{
+        //_idArray.length === 1の時に発生するバグを防ぐため分離する
+        if(_idArray.length > 1){
+            for (let i = 0; _id && i < _idArray.length; i++) {
+                if(formattedEndTime[i] === ''){
+                    formattedEndTime[i] = null;
+                }
+                    const insertDate = new insertEditedRecord(_id[i],formattedStartTime[i],formattedEndTime[i]);
+                    await insertDate.editedRecord();
+                    const calculateTodayWage = new reCalculateWage();
+                    await calculateTodayWage.recalculateTodayWage(_id[i]);
+                }
+            for (let i = 0; i < _idArray.length; i++){
+                console.log(req.body[`checked${i}`]);
+                checkboxValue.push(req.body[`checked${i}`]);
+            }
+            for (let i = 0; i < _idArray.length; i++){
+                if(checkboxValue[i] === 'on'){
+                    const deleteData = new deleteSpecificRecord();
+                    await deleteData.deleteRecord(_id[i]);
+                } 
+            }
+        } else {
+            if(formattedEndTime === ''){
+                formattedEndTime = null;
+            }
+                const insertDate = new insertEditedRecord(_id,formattedStartTime,formattedEndTime);
+                await insertDate.editedRecord();
+                const calculateTodayWage = new reCalculateWage();
+                await calculateTodayWage.recalculateTodayWage(_id);
+                checkboxValue.push(req.body[`checked${0}`]);
+                console.log(JSON.stringify(checkboxValue))
+                if(checkboxValue[0] === 'on'){
+                    const deleteData = new deleteSpecificRecord();
+                    await deleteData.deleteRecord(_id);
+                } 
+        }
+    } catch(err) {
+        console.log(err);
+    }
+    res.redirect(`/admin/WorkRecord/search?employeeName=${specificEmployeeName}&inputMonth=${specificInputMonth}`);
 }

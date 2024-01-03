@@ -20,4 +20,10 @@ router.post('/admin/postPayrollReserch',adminController.postPayrollReserch);
 
 router.get('/admin/WorkRecord/search',adminController.getWorkRecordSearch);
 
+router.post('/admin/payrollReserchEdit',adminController.postPayrollReserchEdit);
+
+router.get('/admin/WorkRecord/getPayrollRerchEdit',adminController.getPayrollReserchEdit);
+
+router.post('/admin/postSpecificWorkRecordEdit',adminController.postSpecificEditedData);
+
 module.exports = router;

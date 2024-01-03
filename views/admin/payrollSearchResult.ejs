@@ -20,6 +20,16 @@
         </form>
         <% if (employeeID.length >0){ %>
         <h1><%= employeeName[0]%>さんのデータ</h1>
+        <div class=""> 
+            <div class="">
+                <form action="/admin/payrollReserchEdit" method="POST">
+                    <input type="hidden" name="employeeName" value="<%= employeeName[0] %>">
+                    <input type="hidden" name="inputMonth" value="<%= inputMonth %>">
+                    <button class="btn btn-warning" type="submit">労働データを編集する</button>
+                </form>
+            </div>
+        </div>
+
         <table class="table table-striped table-bordered">
             <thead>
                 <tr>
