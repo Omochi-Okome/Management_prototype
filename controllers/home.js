@@ -1,6 +1,7 @@
 require('date-utils');
 const {attendanceRegistration} = require('../models/home');
-const {recordStartWork,recordEndWork,fetchName,fetchHourlyWage,calculateWage} = require('../models/work');
+const {recordStartWork,recordEndWork,calculateWage} = require('../models/work');
+const {fetchName,fetchHourlyWage} = require('../models/getFromDatabase');
 
 //ホーム画面表示
 exports.getHome = (req,res) => {

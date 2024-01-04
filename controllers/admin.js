@@ -1,7 +1,8 @@
 const {administrator} = require('../models/admin');
 const {attendanceRegistration} = require('../models/home');
-const {getWorkRecord,reCalculateWage,getSpecificWorkRecord} = require('../models/work');
+const {reCalculateWage} = require('../models/work');
 const {insertEditedRecord,deleteSpecificRecord} = require('../models/edit');
+const {getWorkRecord,getSpecificWorkRecord} = require('../models/getFromDatabase')
 const dayjs = require('dayjs');
 const localizedFormat = require('dayjs/plugin/localizedFormat');
 dayjs.extend(localizedFormat);
@@ -18,7 +19,6 @@ exports.postLogin = async(req,res) => {
     const administratorID = req.body.adminID;
     const administratorPassword = req.body.adminPassword;
     const attendance =  new administrator(administratorID,administratorPassword);
-
     try{    
         const result = await attendance.inspectDB();
         if(result) {

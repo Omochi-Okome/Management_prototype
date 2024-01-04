@@ -11,9 +11,6 @@ class insertEditedRecord{
     async editedRecord() {
         const DB = getDB();
         const collection = DB.collection('workTimeRecord');
-        
-        
-
         try{
             const updateData = {
                 $set: {
