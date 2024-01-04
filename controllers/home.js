@@ -1,6 +1,6 @@
 require('date-utils');
 const {attendanceRegistration} = require('../models/home');
-const {recordStartWork,recordEndWork,calculateWage} = require('../models/work');
+const {recordStartWork,recordBreakWork,recordEndWork,calculateWage} = require('../models/work');
 const {fetchName,fetchHourlyWage} = require('../models/getFromDatabase');
 
 //ホーム画面表示
@@ -41,7 +41,14 @@ exports.postAttendance = async(req,res) => {
             }
         }
         else if(action == 'break') {
-            res.redirect(`/?message=工事中です`);
+            const attendance = new attendanceRegistration(employeeID,employeePassword);
+            result = await attendance.checkIDPassword();
+
+            if(result){
+                recordBreakStartTime = new recordBreakWork(nowTime,employeeID);
+                checkResult = await recordBreakStartTime.writeBreakStartTime();
+                res.redirect(`/?message=${checkResult}`)
+            }
         }
 
         else if(action === 'endWork') {

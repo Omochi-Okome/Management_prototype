@@ -68,6 +68,7 @@
                         <th scope="col">出勤時刻</th>
                         <th scope="col">退勤時刻</th>
                         <th scope="col">勤務時間</th>
+                        <th scope="col">休憩時間</th>
                         <th scope="col">給料</th>
                     </tr>
                 </thead>
@@ -93,6 +94,32 @@
                                 <% } else { %>
                                 <%= result %>
                                 <% } %>
+                            </td>
+                            <td>
+                                <%
+                                const StartTime = new Date(`${breakStartTime[i]}Z`);
+                                const EndTime = new Date(`${breakEndTime[i]}Z`);
+                                const breakdiffTime = EndTime - StartTime;
+                                const breakTime = breakdiffTime / 1000;
+                                const breakHours = Math.floor(breakTime / 3600);
+                                const breakMinutes = Math.floor((breakTime % 3600) / 60);
+                                const breakSeconds = Math.floor(breakTime % 60);
+                                const breakResult =`${breakHours}時間${breakMinutes}分`;
+                                console.log('休憩開始時刻:'+StartTime);
+                                console.log(typeof StartTime);
+                                console.log('休憩終了時刻:'+EndTime);
+                                console.log('breakResult:'+breakResult);            
+                                %>
+                                <% if(breakResult === 'NaN時間NaN分'){ %>
+                                    <% if(EndTime.toString() === 'Invalid Date' && StartTime.toString() !== 'Invalid Date'){ %>
+                                        <%= 'ただいま休憩中' %>
+                                    <% } else { %>
+                                        <%= "休憩時間なし" %>
+                                    <% } %>
+                                <% } else { %>
+                                    <%= breakResult %>
+                                <% } %>
+
                             </td>
                             <td><%= todayWage[i] %>円</td>
                         </tr>
