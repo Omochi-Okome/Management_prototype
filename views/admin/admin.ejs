@@ -18,30 +18,24 @@
 </head>
 
 <body>
-
     <div class="p-3 mb-2 bg-primary text-white">
         <header>
             <h1>勤怠マン(仮称)管理者専用</h1>
         </header>
     </div>
-
     <div class="d-grid gap-2 col-6 mx-auto">
         <form action="/" method="GET">
             <button class="btn btn-link" aria-label="出退勤管理に戻る" type="submit">出勤退管理に戻る</button>
         </form>
     </div>
-
     <div class="d-grid gap-2 col-6 mx-auto">
         <form action="/adminLogin" method="POST">
             <label for="exampleFormControlInput1" class="form-label">管理者IDを入力してください。(半角数字)</label>
             <input type="text" class="form-control" id="exampleFormControlInput1" placeholder="ID" name="adminID">
-            
             <label for="inputPassword5" class="form-label">管理者パスワードを入力してください。</label>
             <input type="password"  class="form-control" id="inputPassword5" placeholder="パスワード" name="adminPassword">
-            
             <button class="btn btn-primary" aria-label="ログインする" type="submit">ログインする</button>
         </form>
-        
         <div class=" alert-warning" role="alert">
             <h1 class="message"><%= message %></h1>
         </div>

@@ -172,6 +172,7 @@ exports.postPayrollReserch = (req,res) => {
     res.redirect(`/admin/WorkRecord/search?employeeName=${employeeName}&inputMonth=${inputMonth}`);
 }
 
+//検索結果の取得
 exports.getWorkRecordSearch = async(req,res) => {
     const employeeName = req.query.employeeName;
     const inputMonth = req.query.inputMonth;
@@ -207,7 +208,7 @@ exports.getWorkRecordSearch = async(req,res) => {
     }
 }
 
-
+//検索結果での絞り込み開始
 exports.postPayrollReserchEdit = (req,res) => {
     const employeeName = req.body.employeeName;
     const inputMonth = req.body.inputMonth;

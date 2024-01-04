@@ -7,20 +7,17 @@
     <title>労働データ編集</title>
 </head>
 <body>
-
     <div class="p-3 mb-2 bg-primary text-white">
         <header>
             <h1>勤怠マン(仮称)管理者専用</h1>
         </header>
     </div>
-
     <div class="d-grid gap-2 col-6 mx-auto">
         <div>
             <form action="/admin/workRecord" method="GET">
                 <button class="btn btn-link" type="submit">労働データに戻る</button>
             </form>
         </div>
-        
         <div>
             <form action="/admin/workRecordEdit/post" method="POST">
                 <button class="btn btn-warning" type="submit">編集を反映する</button>
@@ -39,19 +36,16 @@
                         <% for (let i = 0; i < employeeID.length; i++) { %>
                             <tr>
                                 <input type="hidden" name="_id" value="<%= _id[i]%>">
-                                <td><input type="hidden" name="employeeName" value="<%= employeeName[i]%>"><%= employeeName[i]%></td>
+                                <td><input type="hidden" name="employeeName" value="<%= employeeName[i]%>"><%= employeeName[i] %></td>
                                 <td><input type="hidden" name="employeeID" value="<%= employeeID[i] %>"><%= employeeID[i] %></td>
                                 <td>
-                                    <%
-                                        const startTimeValue = formattedStartTime === '' ? startTime[i] : formattedStartTime[i];
-                                    %>
+                                    <% const startTimeValue = formattedStartTime === '' ? startTime[i] : formattedStartTime[i]; %>
                                     <input type="datetime-local" name="formattedStartTime" value=<%=startTime[i] || formattedStartTime  %>>
                                 </td>
                                 <td>
-                                    <%
-                                        const endTimeValue = formattedEndTime === '' ? endTime[i] : formattedEndTime[i];  
-                                    %>
-                                    <input type="datetime-local" name="formattedEndTime" value=<%= endTime[i] || formattedEndTime %>></td>
+                                    <% const endTimeValue = formattedEndTime === '' ? endTime[i] : formattedEndTime[i]; %>
+                                    <input type="datetime-local" name="formattedEndTime" value=<%= endTime[i] || formattedEndTime %>>
+                                </td>
                                 <td><%
                                     const startDateTime = new Date(`${startTime[i]}Z`);
                                     const endDateTime = new Date(`${endTime[i]}Z`);
@@ -72,10 +66,9 @@
                                 <td>
                                     <div>
                                         <label for="<%=[i]%>">
-                                        <input type="checkbox" id="<%=[i]%>" name="checked<%= i %>" class="btn btn-danger"/>削除する
+                                            <input type="checkbox" id="<%=[i]%>" name="checked<%= i %>" class="btn btn-danger"/>削除する
                                         </label>
                                     </div>
-                                    
                                 </td>
                             </tr>
                         <% } %>
