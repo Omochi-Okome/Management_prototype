@@ -112,9 +112,9 @@
                                 %>
                                 <% if(breakResult === 'NaN時間NaN分'){ %>
                                     <% if(EndTime.toString() === 'Invalid Date' && StartTime.toString() !== 'Invalid Date'){ %>
-                                        <%= 'ただいま休憩中' %>
+                                        <%= '休憩中' %>
                                     <% } else { %>
-                                        <%= "休憩時間なし" %>
+                                        <%= "休憩なし" %>
                                     <% } %>
                                 <% } else { %>
                                     <%= breakResult %>

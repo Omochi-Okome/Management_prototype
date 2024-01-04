@@ -150,23 +150,27 @@ class recordEndWork {
                     endTime: this.endTime
                 }
             };
-
-            const result = await collection.updateOne({ employeeID:parseInt(this.employeeID),endTime:null }, updateData);
-            if (result.modifiedCount >0) {
-                console.log('更新に成功しました');
-                checkResult ='今日もお疲れ様でした！'
+            const forgetResult = await collection.findOne({employeeID:parseInt(this.employeeID),breakStartTime:{$exists:true,$ne:null},breakEndTime:null});
+            if(forgetResult){
+                console.log('休憩終了の打刻忘れ');
+                checkResult = '休憩終了の打刻を先にしてください。'
             } else {
-                console.log('出勤のデータがありません。');
-                checkResult = '出勤のデータがありません。';
+                const result = await collection.updateOne({ employeeID:parseInt(this.employeeID),endTime:null }, updateData);
+                if (result.modifiedCount >0) {
+                    console.log('更新に成功しました');
+                    checkResult ='今日もお疲れ様でした！'
+                } else {
+                    console.log('出勤のデータがありません。');
+                    checkResult = '出勤のデータがありません。';
+                }
             }
+            
         } catch(err) {
             console.log(err);
         }
     return checkResult;
 }
 }
-
-
 
 //勤務した日の給料計算
 class calculateWage {
