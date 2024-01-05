@@ -99,6 +99,8 @@ exports.getWorkRecordEdit = (req,res) => {
         const employeeNames = result.map(employee => employee.employeeName);
         const employeeIDs = result.map(employee => employee.employeeID);
         const startTimes = result.map(employee => employee.startTime);
+        const breakStartTimes = result.map(employee => employee.breakStartTime);
+        const breakEndTimes = result.map(employee => employee.breakEndTime);
         const endTimes = result.map(employee => employee.endTime);
         const todayWages = result.map(employee => employee.todayWage);
         const formattedStartTimes = result.map(employee => dayjs(employee.startTime).format('YYYY年MM月DD日HH時mm分'));
@@ -108,6 +110,8 @@ exports.getWorkRecordEdit = (req,res) => {
             employeeName:employeeNames,
             employeeID:employeeIDs,
             startTime:startTimes,
+            breakStartTime:breakStartTimes,
+            breakEndTime:breakEndTimes,
             endTime:endTimes,
             formattedStartTime:formattedStartTimes,
             formattedEndTime:formattedEndTimes,
@@ -236,6 +240,8 @@ exports.getPayrollReserchEdit = async(req,res) => {
             const employeeNames = result.map(employee => employee.employeeName);
             const employeeIDs = result.map(employee => employee.employeeID);
             const startTimes = result.map(employee => employee.startTime);
+            const breakStartTimes = result.map(employee => employee.breakStartTime);
+            const breakEndTimes = result.map(employee => employee.breakEndTime);
             const endTimes = result.map(employee => employee.endTime);
             const todayWages = result.map(employee => employee.todayWage);
             const formattedStartTimes = result.map(employee => dayjs(employee.startTime).format('YYYY年MM月DD日HH時mm分'));
@@ -245,6 +251,8 @@ exports.getPayrollReserchEdit = async(req,res) => {
                 employeeName:employeeNames,
                 employeeID:employeeIDs,
                 startTime:startTimes,
+                breakStartTime:breakStartTimes,
+                breakEndTime:breakEndTimes,
                 endTime:endTimes,
                 formattedStartTime:formattedStartTimes,
                 formattedEndTime:formattedEndTimes,

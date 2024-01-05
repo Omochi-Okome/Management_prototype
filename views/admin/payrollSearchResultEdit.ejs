@@ -14,7 +14,7 @@
         </header>
     </div>
 
-<div class="d-grid gap-2 col-6 mx-auto">
+<div class="d-grid gap-2 col-8 mx-auto">
     <div>
         <form action="/admin/workRecord" method="GET">
             <button class="btn btn-link" type="submit">労働データに戻る</button>
@@ -34,7 +34,9 @@
                         <th scope="col">出勤時刻</th>
                         <th scope="col">退勤時刻</th>
                         <th scope="col">勤務時間</th>
+                        <th scope="col">休憩時間</th>
                         <th scope="col">給料</th>
+                        <th scope="col">削除</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -69,6 +71,28 @@
                                 <% } else { %>
                                     <input type="hidden" name="workTime" value="<%= result %>"><%= result %>
                                 <% } %>
+                            </td>
+                            <td>
+                                <%
+                                const StartTime = new Date(`${breakStartTime[i]}Z`);
+                                const EndTime = new Date(`${breakEndTime[i]}Z`);
+                                const breakdiffTime = EndTime - StartTime;
+                                const breakTime = breakdiffTime / 1000;
+                                const breakHours = Math.floor(breakTime / 3600);
+                                const breakMinutes = Math.floor((breakTime % 3600) / 60);
+                                const breakSeconds = Math.floor(breakTime % 60);
+                                const breakResult =`${breakHours}時間${breakMinutes}分`;          
+                                %>
+                                <% if(breakResult === 'NaN時間NaN分'){ %>
+                                    <% if(EndTime.toString() === 'Invalid Date' && StartTime.toString() !== 'Invalid Date'){ %>
+                                        <%= '休憩中' %>
+                                    <% } else { %>
+                                        <%= "休憩なし" %>
+                                    <% } %>
+                                <% } else { %>
+                                    <%= breakResult %>
+                                <% } %>
+
                             </td>
                             <td><input type="hidden" name="todayWage" value="<%= todayWage[i] %>"><%= todayWage[i] %>円</td>
                             <td>
