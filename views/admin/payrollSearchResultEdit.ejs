@@ -14,7 +14,7 @@
         </header>
     </div>
 
-<div class="d-grid gap-2 col-8 mx-auto">
+<div class="d-grid gap-2 col-6 mx-auto">
     <div>
         <form action="/admin/workRecord" method="GET">
             <button class="btn btn-link" type="submit">労働データに戻る</button>
@@ -30,7 +30,6 @@
                 <thead>
                     <tr>
                         <th scope="col">従業員氏名</th>
-                        <th scope="col">従業員ID</th>
                         <th scope="col">出勤時刻</th>
                         <th scope="col">退勤時刻</th>
                         <th scope="col">勤務時間</th>
@@ -40,11 +39,10 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <% for (let i = 0; i <= employeeID.length -1; i++) { %>
+                    <% for (let i = 0; i <= employeeName.length -1; i++) { %>
                         <tr>
                             <input type="hidden" name="_id" value="<%= _id[i]%>">
                             <td><input type="hidden" name="employeeName" value="<%= employeeName[i]%>"><%= employeeName[i]%></td>
-                            <td><input type="hidden" name="employeeID" value="<%= employeeID[i] %>"><%= employeeID[i] %></td>
                             <td>
                                 <%
                                     const startTimeValue = formattedStartTime === '' ? startTime[i] : formattedStartTime[i];

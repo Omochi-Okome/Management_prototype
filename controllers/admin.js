@@ -64,7 +64,6 @@ exports.getWorkRecord = (req,res) => {
     .then(result => {
         const message = req.query.message;
         const employeeNames = result.map(employee => employee.employeeName);
-        const employeeIDs = result.map(employee => employee.employeeID);
         const startTimes = result.map(employee => employee.startTime);
         const breakStartTimes = result.map(employee => employee.breakStartTime);
         const breakEndTimes = result.map(employee => employee.breakEndTime);
@@ -74,7 +73,6 @@ exports.getWorkRecord = (req,res) => {
         const formattedEndTimes = result.map(employee => dayjs(employee.endTime).format('YYYY年MM月DD日HH時mm分'));
         res.render('../views/admin/workRecord',{
             employeeName:employeeNames,
-            employeeID:employeeIDs,
             startTime:startTimes,
             breakStartTime:breakStartTimes,
             breakEndTime:breakEndTimes,
@@ -97,7 +95,6 @@ exports.getWorkRecordEdit = (req,res) => {
     .then(result => {
         const _id = result.map(employee => employee._id);
         const employeeNames = result.map(employee => employee.employeeName);
-        const employeeIDs = result.map(employee => employee.employeeID);
         const startTimes = result.map(employee => employee.startTime);
         const breakStartTimes = result.map(employee => employee.breakStartTime);
         const breakEndTimes = result.map(employee => employee.breakEndTime);
@@ -108,7 +105,6 @@ exports.getWorkRecordEdit = (req,res) => {
         res.render('../views/admin/workRecordEdit',{
             _id:_id,
             employeeName:employeeNames,
-            employeeID:employeeIDs,
             startTime:startTimes,
             breakStartTime:breakStartTimes,
             breakEndTime:breakEndTimes,
@@ -191,7 +187,6 @@ exports.getWorkRecordSearch = async(req,res) => {
             const result = await workRecord.getSpecificWorkRecord(employeeName,inputMonth);
             const _ids =  result.map(employee => employee._id);
             const employeeNames = result.map(employee => employee.employeeName);
-            const employeeIDs = result.map(employee => employee.employeeID);
             const startTimes = result.map(employee => employee.startTime);
             const breakStartTimes = result.map(employee => employee.breakStartTime);
             const breakEndTimes = result.map(employee => employee.breakEndTime);    
@@ -202,7 +197,6 @@ exports.getWorkRecordSearch = async(req,res) => {
             res.render('../views/admin/payrollSearchResult.ejs',{
                 _id: _ids,
                 employeeName:employeeNames,
-                employeeID:employeeIDs,
                 startTime:startTimes,
                 breakStartTime:breakStartTimes,
                 breakEndTime:breakEndTimes,    
@@ -238,7 +232,6 @@ exports.getPayrollReserchEdit = async(req,res) => {
             const result = await workRecord.getSpecificWorkRecord(employeeName,inputMonth);
             const _ids =  result.map(employee => employee._id);
             const employeeNames = result.map(employee => employee.employeeName);
-            const employeeIDs = result.map(employee => employee.employeeID);
             const startTimes = result.map(employee => employee.startTime);
             const breakStartTimes = result.map(employee => employee.breakStartTime);
             const breakEndTimes = result.map(employee => employee.breakEndTime);
@@ -249,7 +242,6 @@ exports.getPayrollReserchEdit = async(req,res) => {
             res.render('../views/admin/payrollSearchResultEdit.ejs',{
                 _id: _ids,
                 employeeName:employeeNames,
-                employeeID:employeeIDs,
                 startTime:startTimes,
                 breakStartTime:breakStartTimes,
                 breakEndTime:breakEndTimes,

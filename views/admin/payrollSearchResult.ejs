@@ -14,11 +14,11 @@
         </header>
     </div>
 
-    <div class="d-grid gap-2 col-8 mx-auto">
+    <div class="d-grid gap-2 col-6 mx-auto">
         <form action="/admin/WorkRecord" method="GET">
             <button class="btn btn-link" type="submit">労働データに戻る</button>
         </form>
-        <% if (employeeID.length >0){ %>
+        <% if (employeeName.length >0){ %>
         <h1><%= employeeName[0]%>さんのデータ</h1>
         <div class=""> 
             <div class="">
@@ -34,7 +34,6 @@
             <thead>
                 <tr>
                     <th scope="col">従業員氏名</th>
-                    <th scope="col">従業員ID</th>
                     <th scope="col">出勤時刻</th>
                     <th scope="col">退勤時刻</th>
                     <th scope="col">勤務時間</th>
@@ -44,11 +43,10 @@
             </thead>
             <tbody>
                 <% let totalWage = 0 %>
-                <% for (let i = 0; i <= employeeID.length -1; i++) { %>
+                <% for (let i = 0; i <= employeeName.length -1; i++) { %>
                     <% totalWage += todayWage[i] %>
                     <tr>
                         <td><%= employeeName[i]%></td>
-                        <td><%= employeeID[i] %></td>
                         <td><%= formattedStartTime[i] %></td>
                         <td><%= formattedEndTime[i] %></td>
                         <td><%
