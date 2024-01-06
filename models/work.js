@@ -32,7 +32,8 @@ class recordStartWork {
                 breakEndTime:null,
                 endTime:null,
                 employeeHourlyWage:this.employeeHourlyWage,
-                todayWage:this.todayWage
+                todayWage:this.todayWage,
+                finished:false
                 });
                 checkResult = '正常に出勤登録ができました！'
             } catch(err) {
@@ -57,55 +58,58 @@ class recordBreakWork {
         const collection = DB.collection('workTimeRecord');
         let checkResult;
         try {
+            //pastRecord1がnullでない→breakを開始していない
             const pastRecord1 = await collection.findOne({
                 employeeID:parseInt(this.employeeID),
-                breakStartTime:null,
-                todayWage:null
+                todayWage:null,
+                finished:false
             });
             
+            //pastRecord1がnullでない＝勤務中のデータが見つかった
             if(pastRecord1 !== null){
-                const findStartTime =  await collection.findOne({
+                const whichBreak = await collection.findOne({
                     employeeID:parseInt(this.employeeID),
+                    breakStartTime:{$in:[null,""]},
                     todayWage:null,
-                });
-                const updateData = {
-                    $set: {
-                        employeeID:parseInt(this.employeeID),
-                        breakStartTime:this.breakStartTime
-                    }
-                }
-                const result = await collection.updateOne({employeeID:parseInt(this.employeeID),todayWage:null},updateData)
-                if (result.modifiedCount >0) {
-                    checkResult ='休憩の打刻に成功しました。'
-                } else {
-                    checkResult = '出勤や休憩のデータがないか、すでに退勤されています。';
-                }
-            } else {
-                const pastRecord2 = await collection.findOne({
-                    employeeID:parseInt(this.employeeID),
-                    breakEndTime:null,
-                    todayWage:null
+                    finished:false
                 })
-                if(pastRecord2 !== null) {
-                    const findStartTime =  await collection.findOne({
-                        employeeID:parseInt(this.employeeID),
-                        todayWage:null,
-                    });
+                //whichBreakがnullでない＝休憩打刻を初めて行う→休憩開始
+                if(whichBreak !== null){
                     const updateData = {
                         $set: {
                             employeeID:parseInt(this.employeeID),
-                            breakEndTime:this.breakStartTime
+                            breakStartTime:this.breakStartTime
                         }
                     }
                     const result = await collection.updateOne({employeeID:parseInt(this.employeeID),todayWage:null},updateData)
-                    if (result.modifiedCount >0) {
-                        checkResult ='休憩の打刻に成功しました。'
+                } else {
+                    const whichBreak2 = await collection.findOne({
+                        employeeID:parseInt(this.employeeID),
+                        breakEndTime:{$in:[null, ""]},
+                        todayWage:null,
+                        finished:false
+                    })
+                    //whichBreak2がnullでない== 休憩終了打刻
+                    if(whichBreak2 !== null){
+                        const updateData = {
+                            $set: {
+                                employeeID:parseInt(this.employeeID),
+                                breakEndTime:this.breakStartTime
+                            }
+                        }
+                        const result = await collection.updateOne({employeeID:parseInt(this.employeeID),todayWage:null},updateData)
+                        if (result.modifiedCount >0) {
+                            checkResult ='休憩の打刻に成功しました。'
+                        } else {
+                            checkResult = '休憩の打刻に失敗しました。';
+                        }
                     } else {
-                        checkResult = '出勤や休憩のデータがないか、すでに退勤されています。';
+                        checkResult = 'すでに休憩を終えています。'
                     }
-                } else{
-                    checkResult = '出勤や休憩が未完了か、すでに退勤されています。';
                 }
+            } else {
+                //そもそも勤務中ではない
+                checkResult = '出勤が未完了か、すでに退勤されています。';
             }
             
         } catch(err) {
@@ -135,7 +139,8 @@ class recordEndWork {
                 $set: {
                     employeeID: parseInt(this.employeeID),
                     startTime: existingData,
-                    endTime: this.endTime
+                    endTime: this.endTime,
+                    finished:true
                 }
             };
             const forgetResult = await collection.findOne({employeeID:parseInt(this.employeeID),breakStartTime:{$exists:true,$ne:null},breakEndTime:null});
