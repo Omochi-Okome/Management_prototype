@@ -158,7 +158,7 @@ exports.postWorkRecordEdit = async(req,res) => {
             if(formattedEndTime === ''){
                 formattedEndTime = null;
             }
-                const insertDate = new insertEditedRecord(_id,formattedStartTime,formattedEndTime);
+                const insertDate = new insertEditedRecord(_id,formattedStartTime,formattedBreakStartTime,formattedBreakEndTime,formattedEndTime);
                 await insertDate.editedRecord();
                 const calculateTodayWage = new reCalculateWage();
                 await calculateTodayWage.recalculateTodayWage(_id);
@@ -306,7 +306,7 @@ exports.postSpecificEditedData = async(req,res) => {
             if(formattedEndTime === ''){
                 formattedEndTime = null;
             }
-                const insertDate = new insertEditedRecord(_id,formattedStartTime,formattedEndTime);
+                const insertDate = new insertEditedRecord(_id,formattedStartTime,formattedBreakStartTime,formattedBreakEndTime,formattedEndTime);
                 await insertDate.editedRecord();
                 const calculateTodayWage = new reCalculateWage();
                 await calculateTodayWage.recalculateTodayWage(_id);
