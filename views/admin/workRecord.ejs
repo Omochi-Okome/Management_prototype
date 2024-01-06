@@ -103,10 +103,6 @@
                                 const breakMinutes = Math.floor((breakTime % 3600) / 60);
                                 const breakSeconds = Math.floor(breakTime % 60);
                                 const breakResult =`${breakHours}時間${breakMinutes}分`;
-                                console.log('休憩開始時刻:'+StartTime);
-                                console.log(typeof StartTime);
-                                console.log('休憩終了時刻:'+EndTime);
-                                console.log('breakResult:'+breakResult);            
                                 %>
                                 <% if(breakResult === 'NaN時間NaN分'){ %>
                                     <% if(EndTime.toString() === 'Invalid Date' && StartTime.toString() !== 'Invalid Date'){ %>

@@ -23,7 +23,6 @@ class fetchName {
             if (result) {
                 return result.employeeName;
             } else {
-                console.log('IDが誤っています。');
                 return null;
             }
             })
@@ -43,7 +42,6 @@ class fetchHourlyWage {
                 if (result) {
                     return result.employeeHourlyWage;
                 } else {
-                    console.log('IDが誤っています。');
                     return null;
                 }
             })

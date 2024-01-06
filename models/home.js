@@ -16,14 +16,8 @@ class attendanceRegistration {
             .toArray()
             .then(data => {
                 if (data.length > 0) {
-                    console.log('パスワードとIDが一致しました!!');
-                    console.log(`従業員名:${data[0].employeeName}`);
-                    console.log(`ID:${data[0].employeeID}`);
-                    console.log(`Password:${data[0].employeePassword}`);
-                    console.log(`時給:${data[0].employeeHourlyWage}円`);
                     return true;
                 } else {
-                    console.log('パスワードかIDが誤aっています。');
                     checkResult ='パスワードかIDが誤っています。'
                     return false;
                 }

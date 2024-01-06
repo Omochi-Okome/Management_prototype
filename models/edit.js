@@ -43,7 +43,6 @@ class insertEditedRecord{
 //チェックが入った対象のデータを削除する
 class deleteSpecificRecord {
     async deleteRecord(_id){
-        console.log('_idは'+_id);
         const DB = getDB();
         const collection = DB.collection('workTimeRecord')
         try{

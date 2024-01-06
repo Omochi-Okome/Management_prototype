@@ -15,10 +15,8 @@ class administrator {
             .toArray()
             .then(data => {
                 if (data.length > 0) {
-                    console.log('パスワードとIDが一致しました!!');
                     return true;
                 } else {
-                    console.log('パスワードかIDが誤っています。');
                     return false;
                 }
             })

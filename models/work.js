@@ -40,7 +40,6 @@ class recordStartWork {
             }   
         } else {
             checkResult = 'すでに出勤しています。'
-            console.log('すでに出勤しています');
         }   
         return checkResult;
     }
@@ -54,7 +53,6 @@ class recordBreakWork {
         this.employeeID = employeeID;
     }
     async writeBreakStartTime() {
-        console.log('休憩開始時刻：'+this.breakStartTime);//休憩開始時刻は正しく取得できている
         const DB = getDB();
         const collection = DB.collection('workTimeRecord');
         let checkResult;
@@ -66,13 +64,10 @@ class recordBreakWork {
             });
             
             if(pastRecord1 !== null){
-                console.log("STARTが作動");
-
                 const findStartTime =  await collection.findOne({
                     employeeID:parseInt(this.employeeID),
                     todayWage:null,
                 });
-                console.log('findOneの結果：'+JSON.stringify(findStartTime))
                 const updateData = {
                     $set: {
                         employeeID:parseInt(this.employeeID),
@@ -81,10 +76,8 @@ class recordBreakWork {
                 }
                 const result = await collection.updateOne({employeeID:parseInt(this.employeeID),todayWage:null},updateData)
                 if (result.modifiedCount >0) {
-                    console.log('休憩の打刻に成功しました');
                     checkResult ='休憩の打刻に成功しました。'
                 } else {
-                    console.log('休憩の打刻ができませんでした。');
                     checkResult = '出勤や休憩のデータがないか、すでに退勤されています。';
                 }
             } else {
@@ -94,12 +87,10 @@ class recordBreakWork {
                     todayWage:null
                 })
                 if(pastRecord2 !== null) {
-                    console.log("ENDが作動");
                     const findStartTime =  await collection.findOne({
                         employeeID:parseInt(this.employeeID),
                         todayWage:null,
                     });
-                    console.log('findOneの結果：'+JSON.stringify(findStartTime))
                     const updateData = {
                         $set: {
                             employeeID:parseInt(this.employeeID),
@@ -108,14 +99,11 @@ class recordBreakWork {
                     }
                     const result = await collection.updateOne({employeeID:parseInt(this.employeeID),todayWage:null},updateData)
                     if (result.modifiedCount >0) {
-                        console.log('休憩の打刻に成功しました');
                         checkResult ='休憩の打刻に成功しました。'
                     } else {
-                        console.log('休憩の打刻ができませんでした。');
                         checkResult = '出勤や休憩のデータがないか、すでに退勤されています。';
                     }
                 } else{
-                    console.log('STARTにもENDにも引っ掛からなかった');
                     checkResult = '出勤や休憩が未完了か、すでに退勤されています。';
                 }
             }
@@ -152,15 +140,12 @@ class recordEndWork {
             };
             const forgetResult = await collection.findOne({employeeID:parseInt(this.employeeID),breakStartTime:{$exists:true,$ne:null},breakEndTime:null});
             if(forgetResult){
-                console.log('休憩終了の打刻忘れ');
                 checkResult = '休憩終了の打刻を先にしてください。'
             } else {
                 const result = await collection.updateOne({ employeeID:parseInt(this.employeeID),endTime:null }, updateData);
                 if (result.modifiedCount >0) {
-                    console.log('更新に成功しました');
                     checkResult ='今日もお疲れ様でした！'
                 } else {
-                    console.log('出勤のデータがありません。');
                     checkResult = '出勤のデータがありません。';
                 }
             }
@@ -232,20 +217,16 @@ class reCalculateWage {
                     const endTime = dayjs(result.endTime);
                 if (startTime.isValid() && endTime.isValid()) {
                     if(breakStartTime.isValid() && breakEndTime.isValid()){
-                        console.log('第3関門');
                         const calculateWorkTime = endTime.diff(startTime,'minutes');
                         const calculateBreakTime = breakEndTime.diff(breakStartTime,'minutes');
                         const employeeMinutesWage = result.employeeHourlyWage/60;
                         const todayWage = (calculateWorkTime - calculateBreakTime)*employeeMinutesWage;
-                        console.log('賃金:'+todayWage);
                         const updateData = {
                             $set: { todayWage: parseInt(todayWage)}
                         };
-                        console.log('updateDataの中身:'+updateData);
                         await DB.collection('workTimeRecord')
                             .updateOne({_id:result._id},updateData);
                     } else{
-                        console.log('第4関門');
                         const calculateWorkTime = endTime.diff(startTime,'minutes');
                         const employeeMinutesWage = result.employeeHourlyWage/60;
                         const todayWage = calculateWorkTime*employeeMinutesWage;

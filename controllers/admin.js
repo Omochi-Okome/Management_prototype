@@ -163,7 +163,6 @@ exports.postWorkRecordEdit = async(req,res) => {
                 const calculateTodayWage = new reCalculateWage();
                 await calculateTodayWage.recalculateTodayWage(_id);
                 checkboxValue.push(req.body[`checked${0}`]);
-                console.log(JSON.stringify(checkboxValue))
                 if(checkboxValue[0] === 'on'){;
                     const deleteData = new deleteSpecificRecord();
                     await deleteData.deleteRecord(_id);
@@ -186,7 +185,6 @@ exports.postPayrollReserch = (req,res) => {
 exports.getWorkRecordSearch = async(req,res) => {
     const employeeName = req.query.employeeName;
     const inputMonth = req.query.inputMonth;
-    console.log('氏名:'+employeeName+'年月:'+inputMonth);
     const workRecord = new getSpecificWorkRecord();
     try{
         if(employeeName !=='' & inputMonth !== ''){
@@ -231,7 +229,6 @@ exports.postPayrollReserchEdit = (req,res) => {
 exports.getPayrollReserchEdit = async(req,res) => {
     const employeeName = req.query.employeeName;
     const inputMonth = req.query.inputMonth;
-    console.log('氏名:'+employeeName+'年月:'+inputMonth);
     const workRecord = new getSpecificWorkRecord();
     try{
         if(employeeName !=='' & inputMonth !== ''){
@@ -293,7 +290,6 @@ exports.postSpecificEditedData = async(req,res) => {
                     await calculateTodayWage.recalculateTodayWage(_id[i]);
                 }
             for (let i = 0; i < _idArray.length; i++){
-                console.log(req.body[`checked${i}`]);
                 checkboxValue.push(req.body[`checked${i}`]);
             }
             for (let i = 0; i < _idArray.length; i++){
@@ -311,7 +307,6 @@ exports.postSpecificEditedData = async(req,res) => {
                 const calculateTodayWage = new reCalculateWage();
                 await calculateTodayWage.recalculateTodayWage(_id);
                 checkboxValue.push(req.body[`checked${0}`]);
-                console.log(JSON.stringify(checkboxValue))
                 if(checkboxValue[0] === 'on'){
                     const deleteData = new deleteSpecificRecord();
                     await deleteData.deleteRecord(_id);
