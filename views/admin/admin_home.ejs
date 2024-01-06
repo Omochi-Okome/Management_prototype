@@ -15,22 +15,24 @@
         </header>
     </div>
     
-    <div class="d-grid gap-2 col-2 mx-auto">
-        <div>
-            <form action="/" method="GET">
-                <button class="btn btn-link" type="submit" aria-label="出退勤管理に戻る">出勤退管理に戻る</button>
-            </form>
+    <div class="container-fluid">
+        <div class="d-grid gap-2 col-xl-4 col-lg-4 col-md-6 col-sm-8 mx-auto ">
+            <div class="row justify-content-center">
+                <form action="/" method="GET">
+                    <button class="btn btn-link" type="submit" aria-label="出退勤管理に戻る">出勤退管理に戻る</button>
+                </form>
+            </div>
+            <div class="row justify-content-center">
+                <form action="/admin/employeeInformation">
+                    <button class="btn btn-primary" aria-label="従業員のデータを見る" type="submit">従業員のデータを見る</button>
+                </form>
+            </div>
+            <div class="row justify-content-center">
+                <form action="/admin/workRecord">
+                    <button class="btn btn-primary" aria-label="労働データを見る" type="submit">労働データを見る</button>
+                </form>
+            </div>
         </div>
-
-        <div>
-            <form action="/admin/employeeInformation">
-                <button class="btn btn-primary" aria-label="従業員のデータを見る" type="submit">従業員のデータを見る</button>
-            </form>
-            <form action="/admin/workRecord">
-                <button class="btn btn-primary" aria-label="労働データを見る" type="submit">労働データを見る</button>
-            </form>
-        </div>
-
     </div>
 
 </body>

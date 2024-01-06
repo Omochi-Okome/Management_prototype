@@ -12,60 +12,62 @@
             <h1>アドテン 管理者専用</h1>
         </header>
     </div>
-    <div class="d-grid gap-2 col-7 mx-auto">
-        <div>
-            <form action="/admin/workRecord" method="GET">
-                <button class="btn btn-link" type="submit">労働データに戻る</button>
-            </form>
-        </div>
-        <div>
-            <form action="/admin/workRecordEdit/post" method="POST">
-                <button class="btn btn-warning" type="submit">編集を反映する</button>
-                <table class="table table-striped table-bordered">
-                    <thead>
-                        <tr>
-                            <th scope="col">従業員氏名</th>
-                            <th scope="col">出勤時刻</th>
-                            <th scope="col">退勤時刻</th>
-                            <th scope="col">休憩開始時刻</th>
-                            <th scope="col">休憩終了時刻</th>
-                            <th scope="col">削除</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <% for (let i = 0; i < employeeName.length; i++) { %>
+    <div class="container-fluid">
+        <div class="d-grid col-xl-10 col-lg-12 col-md-12 col-sm-12 mx-auto">
+            <div class="row justify-content-start">
+                <form action="/admin/workRecord" method="GET">
+                    <button class="btn btn-link" type="submit">労働データに戻る</button>
+                </form>
+            </div>
+            <div class="table-responsive">
+                <form action="/admin/workRecordEdit/post" method="POST">
+                    <button class="btn btn-warning" type="submit">編集を反映する</button>
+                    <table class="table table-striped table-bordered">
+                        <thead>
                             <tr>
-                                <input type="hidden" name="_id" value="<%= _id[i]%>">
-                                <td><input type="hidden" name="employeeName" value="<%= employeeName[i]%>"><%= employeeName[i] %></td>
-                                <td>
-                                    <% const startTimeValue = formattedStartTime === '' ? startTime[i] : formattedStartTime[i]; %>
-                                    <input type="datetime-local" name="formattedStartTime" value=<%=startTime[i] || formattedStartTime  %>>
-                                </td>
-                                <td>
-                                    <% const endTimeValue = formattedEndTime === '' ? endTime[i] : formattedEndTime[i]; %>
-                                    <input type="datetime-local" name="formattedEndTime" value=<%= endTime[i] || formattedEndTime %>>
-                                </td>
-                                <td>
-                                    <% const breakStartValue = formattedBreakStartTime === '' ? breakStartTime[i] : formattedBreakStartTime[i]; %>
-                                    <input type="datetime-local" name="formattedBreakStartTime" value=<%= breakStartTime[i] || formattedBreakStartTime %>>
-                                </td>
-                                <td>
-                                    <% const breakEndValue = formattedBreakEndTime === '' ? breakEndTime[i] : formattedBreakEndTime[i]; %>
-                                    <input type="datetime-local" name="formattedBreakEndTime" value=<%= breakEndTime[i] || formattedBreakEndTime %>>
-                                </td>
-                                <td>
-                                    <div>
-                                        <label for="<%=[i]%>">
-                                        <input type="checkbox" id="<%=[i]%>" name="checked<%= i %>" class="btn btn-danger"/>削除する
-                                        </label>
-                                    </div>
-                                </td>
+                                <th scope="col">氏名</th>
+                                <th scope="col">出勤時刻</th>
+                                <th scope="col">退勤時刻</th>
+                                <th scope="col">休憩開始時刻</th>
+                                <th scope="col">休憩終了時刻</th>
+                                <th scope="col">削除</th>
                             </tr>
-                        <% } %>
-                    </tbody>
-                </table>
-            </form>
-        </div>    
+                        </thead>
+                        <tbody>
+                            <% for (let i = 0; i < employeeName.length; i++) { %>
+                                <tr>
+                                    <input type="hidden" name="_id" value="<%= _id[i]%>">
+                                    <td><input type="hidden" name="employeeName" value="<%= employeeName[i]%>"><%= employeeName[i] %></td>
+                                    <td>
+                                        <% const startTimeValue = formattedStartTime === '' ? startTime[i] : formattedStartTime[i]; %>
+                                        <input type="datetime-local" name="formattedStartTime" value=<%=startTime[i] || formattedStartTime  %>>
+                                    </td>
+                                    <td>
+                                        <% const endTimeValue = formattedEndTime === '' ? endTime[i] : formattedEndTime[i]; %>
+                                        <input type="datetime-local" name="formattedEndTime" value=<%= endTime[i] || formattedEndTime %>>
+                                    </td>
+                                    <td>
+                                        <% const breakStartValue = formattedBreakStartTime === '' ? breakStartTime[i] : formattedBreakStartTime[i]; %>
+                                        <input type="datetime-local" name="formattedBreakStartTime" value=<%= breakStartTime[i] || formattedBreakStartTime %>>
+                                    </td>
+                                    <td>
+                                        <% const breakEndValue = formattedBreakEndTime === '' ? breakEndTime[i] : formattedBreakEndTime[i]; %>
+                                        <input type="datetime-local" name="formattedBreakEndTime" value=<%= breakEndTime[i] || formattedBreakEndTime %>>
+                                    </td>
+                                    <td>
+                                        <div>
+                                            <label for="<%=[i]%>">
+                                            <input type="checkbox" id="<%=[i]%>" name="checked<%= i %>" class="btn btn-danger"/>削除
+                                            </label>
+                                        </div>
+                                    </td>
+                                </tr>
+                            <% } %>
+                        </tbody>
+                    </table>
+                </form>
+            </div>    
+        </div>
     </div>
 </body>
 </html>

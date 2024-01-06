@@ -14,88 +14,91 @@
         </header>
     </div>
 
-    <div class="d-grid gap-2 col-6 mx-auto">
-        <form action="/admin/WorkRecord" method="GET">
-            <button class="btn btn-link" type="submit">労働データに戻る</button>
-        </form>
-        <% if (employeeName.length >0){ %>
-        <h1><%= employeeName[0]%>さんのデータ</h1>
-        <div class=""> 
-            <div class="">
-                <form action="/admin/payrollReserchEdit" method="POST">
-                    <input type="hidden" name="employeeName" value="<%= employeeName[0] %>">
-                    <input type="hidden" name="inputMonth" value="<%= inputMonth %>">
-                    <button class="btn btn-warning" type="submit">労働データを編集する</button>
-                </form>
+    <div class="container-fluid">
+        <div class="d-grid gap-2 col-xl-10 col-lg-12 col-md-12 col-sm-12 mx-auto">
+            <form action="/admin/WorkRecord" method="GET">
+                <button class="btn btn-link" type="submit">労働データに戻る</button>
+            </form>
+            <% if (employeeName.length >0){ %>
+            <h1><%= employeeName[0]%>さんのデータ</h1>
+            <div class=""> 
+                <div class="">
+                    <form action="/admin/payrollReserchEdit" method="POST">
+                        <input type="hidden" name="employeeName" value="<%= employeeName[0] %>">
+                        <input type="hidden" name="inputMonth" value="<%= inputMonth %>">
+                        <button class="btn btn-warning" type="submit">労働データを編集する</button>
+                    </form>
+                </div>
             </div>
-        </div>
-
-        <table class="table table-striped table-bordered">
-            <thead>
-                <tr>
-                    <th scope="col">従業員氏名</th>
-                    <th scope="col">出勤時刻</th>
-                    <th scope="col">退勤時刻</th>
-                    <th scope="col">勤務時間</th>
-                    <th scope="col">休憩時間</th>
-                    <th scope="col">給料</th>
-                </tr>
-            </thead>
-            <tbody>
-                <% let totalWage = 0 %>
-                <% for (let i = 0; i <= employeeName.length -1; i++) { %>
-                    <% totalWage += todayWage[i] %>
+            <div class="table-responsive">
+            <table class="table table-striped table-bordered">
+                <thead>
                     <tr>
-                        <td><%= employeeName[i]%></td>
-                        <td><%= formattedStartTime[i] %></td>
-                        <td><%= formattedEndTime[i] %></td>
-                        <td><%
-                            const startDateTime = new Date(`${startTime[i]}Z`);
-                            const endDateTime = new Date(`${endTime[i]}Z`);
-                            const diffTime = endDateTime - startDateTime;
-                            const workTime = diffTime / 1000;
-                            const hours = Math.floor(workTime / 3600);
-                            const minutes = Math.floor((workTime % 3600) / 60);
-                            const seconds = Math.floor(workTime % 60);
-                            const result =`${hours}時間${minutes}分`;            
-                            %>
-                            <% if(result === 'NaN時間NaN分'){ %>
-                            <%= "出勤中です" %>
-                            <% } else { %>
-                            <%= result %>
-                            <% } %>
-                        </td>
-                        <td>
-                            <%
-                            const StartTime = new Date(`${breakStartTime[i]}Z`);
-                            const EndTime = new Date(`${breakEndTime[i]}Z`);
-                            const breakdiffTime = EndTime - StartTime;
-                            const breakTime = breakdiffTime / 1000;
-                            const breakHours = Math.floor(breakTime / 3600);
-                            const breakMinutes = Math.floor((breakTime % 3600) / 60);
-                            const breakSeconds = Math.floor(breakTime % 60);
-                            const breakResult =`${breakHours}時間${breakMinutes}分`;
-                            %>
-                            <% if(breakResult === 'NaN時間NaN分'){ %>
-                                <% if(EndTime.toString() === 'Invalid Date' && StartTime.toString() !== 'Invalid Date'){ %>
-                                    <%= '休憩中' %>
-                                <% } else { %>
-                                    <%= "休憩なし" %>
-                                <% } %>
-                            <% } else { %>
-                                <%= breakResult %>
-                            <% } %>
-
-                        </td>
-                        <td><%= todayWage[i] %>円</td>
+                        <th scope="col">氏名</th>
+                        <th scope="col">出勤時刻</th>
+                        <th scope="col">退勤時刻</th>
+                        <th scope="col">勤務時間</th>
+                        <th scope="col">休憩時間</th>
+                        <th scope="col">給料</th>
                     </tr>
-                <% } %>
-            </tbody>
-        </table>
-        <h1>支払総額<%= totalWage %>円</h1>
-        <% } else { %>
-            <h1>該当する期間のデータはありません</h1>
-        <% } %>
+                </thead>
+                <tbody>
+                    <% let totalWage = 0 %>
+                    <% for (let i = 0; i <= employeeName.length -1; i++) { %>
+                        <% totalWage += todayWage[i] %>
+                        <tr>
+                            <td><%= employeeName[i]%></td>
+                            <td><%= formattedStartTime[i] %></td>
+                            <td><%= formattedEndTime[i] %></td>
+                            <td><%
+                                const startDateTime = new Date(`${startTime[i]}Z`);
+                                const endDateTime = new Date(`${endTime[i]}Z`);
+                                const diffTime = endDateTime - startDateTime;
+                                const workTime = diffTime / 1000;
+                                const hours = Math.floor(workTime / 3600);
+                                const minutes = Math.floor((workTime % 3600) / 60);
+                                const seconds = Math.floor(workTime % 60);
+                                const result =`${hours}時間${minutes}分`;            
+                                %>
+                                <% if(result === 'NaN時間NaN分'){ %>
+                                <%= "出勤中です" %>
+                                <% } else { %>
+                                <%= result %>
+                                <% } %>
+                            </td>
+                            <td>
+                                <%
+                                const StartTime = new Date(`${breakStartTime[i]}Z`);
+                                const EndTime = new Date(`${breakEndTime[i]}Z`);
+                                const breakdiffTime = EndTime - StartTime;
+                                const breakTime = breakdiffTime / 1000;
+                                const breakHours = Math.floor(breakTime / 3600);
+                                const breakMinutes = Math.floor((breakTime % 3600) / 60);
+                                const breakSeconds = Math.floor(breakTime % 60);
+                                const breakResult =`${breakHours}時間${breakMinutes}分`;
+                                %>
+                                <% if(breakResult === 'NaN時間NaN分'){ %>
+                                    <% if(EndTime.toString() === 'Invalid Date' && StartTime.toString() !== 'Invalid Date'){ %>
+                                        <%= '休憩中' %>
+                                    <% } else { %>
+                                        <%= "休憩なし" %>
+                                    <% } %>
+                                <% } else { %>
+                                    <%= breakResult %>
+                                <% } %>
+
+                            </td>
+                            <td><%= todayWage[i] %>円</td>
+                        </tr>
+                    <% } %>
+                </tbody>
+            </table>
+        </div>
+            <h1>支払総額<%= totalWage %>円</h1>
+            <% } else { %>
+                <h1>該当する期間のデータはありません</h1>
+            <% } %>
+        </div>
     </div>
 
 </body>
