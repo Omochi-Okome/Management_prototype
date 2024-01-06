@@ -47,7 +47,7 @@
                 <button class="btn btn-primary" type="submit" name ="action" value="endWork" aria-label="退勤する">退勤する</button>
             </form>
         </div>
-            <% if(message === 'IDかパスワードが正しくありません。' || message === '工事中です' || message === '出勤のデータがありません。' || message === 'すでに出勤しています。'){ %>
+            <% if(message === 'IDかパスワードが正しくありません。' || message === '出勤のデータがありません。' || message === 'すでに出勤しています。'){ %>
                 <div class=" alert-warning" role="alert">
                     <h1 class="message"><%= message %></h1>
                 </div>

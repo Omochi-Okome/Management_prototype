@@ -101,6 +101,8 @@ exports.getWorkRecordEdit = (req,res) => {
         const endTimes = result.map(employee => employee.endTime);
         const todayWages = result.map(employee => employee.todayWage);
         const formattedStartTimes = result.map(employee => dayjs(employee.startTime).format('YYYY年MM月DD日HH時mm分'));
+        const formattedBreakStartTimes = result.map(employee =>dayjs(employee.breakStartTime).format('YYYY年MM月DD日HH時mm分'));
+        const formattedBreakEndTimes = result.map(employee =>dayjs(employee.breakEndTime).format('YYYY年MM月DD日HH時mm分'));
         const formattedEndTimes = result.map(employee => dayjs(employee.endTime).format('YYYY年MM月DD日HH時mm分'));
         res.render('../views/admin/workRecordEdit',{
             _id:_id,
@@ -110,6 +112,8 @@ exports.getWorkRecordEdit = (req,res) => {
             breakEndTime:breakEndTimes,
             endTime:endTimes,
             formattedStartTime:formattedStartTimes,
+            formattedBreakStartTime:formattedBreakStartTimes,
+            formattedBreakEndTime:formattedBreakEndTimes,
             formattedEndTime:formattedEndTimes,
             todayWage:todayWages,
 
@@ -125,6 +129,8 @@ exports.postWorkRecordEdit = async(req,res) => {
     let checkboxValue = [];
     const _id = req.body._id;
     const formattedStartTime = req.body.formattedStartTime;
+    const formattedBreakStartTime = req.body.formattedBreakStartTime;
+    const formattedBreakEndTime = req.body.formattedBreakEndTime;
     const formattedEndTime = req.body.formattedEndTime;
     const _idArray = Array.isArray(_id) ? _id : [_id];
     try{
@@ -134,7 +140,7 @@ exports.postWorkRecordEdit = async(req,res) => {
             if(formattedEndTime[i] === ''){
                 formattedEndTime[i] = null;
             }
-                const insertDate = new insertEditedRecord(_id[i],formattedStartTime[i],formattedEndTime[i]);
+                const insertDate = new insertEditedRecord(_id[i],formattedStartTime[i],formattedBreakStartTime[i],formattedBreakEndTime[i],formattedEndTime[i]);
                 await insertDate.editedRecord();
                 const calculateTodayWage = new reCalculateWage();
                 await calculateTodayWage.recalculateTodayWage(_id[i]);
@@ -234,6 +240,8 @@ exports.getPayrollReserchEdit = async(req,res) => {
             const employeeNames = result.map(employee => employee.employeeName);
             const startTimes = result.map(employee => employee.startTime);
             const breakStartTimes = result.map(employee => employee.breakStartTime);
+            const formattedBreakStartTimes = result.map(employee =>dayjs(employee.breakStartTime).format('YYYY年MM月DD日HH時mm分'));
+            const formattedBreakEndTimes = result.map(employee =>dayjs(employee.breakEndTime).format('YYYY年MM月DD日HH時mm分'));    
             const breakEndTimes = result.map(employee => employee.breakEndTime);
             const endTimes = result.map(employee => employee.endTime);
             const todayWages = result.map(employee => employee.todayWage);
@@ -247,6 +255,8 @@ exports.getPayrollReserchEdit = async(req,res) => {
                 breakEndTime:breakEndTimes,
                 endTime:endTimes,
                 formattedStartTime:formattedStartTimes,
+                formattedBreakStartTime:formattedBreakStartTimes,
+                formattedBreakEndTime:formattedBreakEndTimes,    
                 formattedEndTime:formattedEndTimes,
                 todayWage:todayWages,
                 inputMonth:inputMonth,
@@ -264,6 +274,8 @@ exports.postSpecificEditedData = async(req,res) => {
     let checkboxValue = [];
     const _id = req.body._id;
     const formattedStartTime = req.body.formattedStartTime;
+    const formattedBreakStartTime = req.body.formattedBreakStartTime;
+    const formattedBreakEndTime = req.body.formattedBreakEndTime;
     const formattedEndTime = req.body.formattedEndTime;
     const specificEmployeeName = req.body.specificEmployeeName;
     const specificInputMonth = req.body.specificInputMonth;
@@ -275,7 +287,7 @@ exports.postSpecificEditedData = async(req,res) => {
                 if(formattedEndTime[i] === ''){
                     formattedEndTime[i] = null;
                 }
-                    const insertDate = new insertEditedRecord(_id[i],formattedStartTime[i],formattedEndTime[i]);
+                    const insertDate = new insertEditedRecord(_id[i],formattedStartTime[i],formattedBreakStartTime[i],formattedBreakEndTime[i],formattedEndTime[i]);
                     await insertDate.editedRecord();
                     const calculateTodayWage = new reCalculateWage();
                     await calculateTodayWage.recalculateTodayWage(_id[i]);

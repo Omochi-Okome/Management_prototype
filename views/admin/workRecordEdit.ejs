@@ -12,7 +12,7 @@
             <h1>勤怠マン(仮称)管理者専用</h1>
         </header>
     </div>
-    <div class="d-grid gap-2 col-6 mx-auto">
+    <div class="d-grid gap-2 col-9 mx-auto">
         <div>
             <form action="/admin/workRecord" method="GET">
                 <button class="btn btn-link" type="submit">労働データに戻る</button>
@@ -28,6 +28,8 @@
                             <th scope="col">出勤時刻</th>
                             <th scope="col">退勤時刻</th>
                             <th scope="col">勤務時間</th>
+                            <th scope="col">休憩開始時刻</th>
+                            <th scope="col">休憩終了時刻</th>
                             <th scope="col">休憩時間</th>
                             <th scope="col">給料</th>
                             <th scope="col">削除</th>
@@ -61,6 +63,14 @@
                                     <% } else { %>
                                         <input type="hidden" name="workTime" value="<%= result %>"><%= result %>
                                     <% } %>
+                                </td>
+                                <td>
+                                    <% const breakStartValue = formattedBreakStartTime === '' ? breakStartTime[i] : formattedBreakStartTime[i]; %>
+                                    <input type="datetime-local" name="formattedBreakStartTime" value=<%= breakStartTime[i] || formattedBreakStartTime %>>
+                                </td>
+                                <td>
+                                    <% const breakEndValue = formattedBreakEndTime === '' ? breakEndTime[i] : formattedBreakEndTime[i]; %>
+                                    <input type="datetime-local" name="formattedBreakEndTime" value=<%= breakEndTime[i] || formattedBreakEndTime %>>
                                 </td>
                                 <td>
                                     <%

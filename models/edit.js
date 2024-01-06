@@ -3,9 +3,11 @@ const getDB = require('../util/database').getDB;
 
 //編集した労働データを挿入する
 class insertEditedRecord{
-    constructor(_idArray,formattedStartTime,formattedEndTime){
+    constructor(_idArray,formattedStartTime,formattedBreakStartTime,formattedBreakEndTime,formattedEndTime){
         this._id = _idArray;
         this.formattedStartTime = formattedStartTime;
+        this.formattedBreakStartTime = formattedBreakStartTime;
+        this.formattedBreakEndTime = formattedBreakEndTime;
         this.formattedEndTime = formattedEndTime;
     }
     async editedRecord() {
@@ -15,6 +17,8 @@ class insertEditedRecord{
             const updateData = {
                 $set: {
                     startTime: this.formattedStartTime,
+                    breakStartTime: this.formattedBreakStartTime,
+                    breakEndTime: this.formattedBreakEndTime,
                     endTime: this.formattedEndTime
                 }
             };
