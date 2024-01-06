@@ -82,6 +82,11 @@ class recordBreakWork {
                         }
                     }
                     const result = await collection.updateOne({employeeID:parseInt(this.employeeID),todayWage:null},updateData)
+                    if (result.modifiedCount >0) {
+                        checkResult ='休憩開始の打刻に成功しました。'
+                    } else {
+                        checkResult = '休憩の打刻に失敗しました。';
+                    }
                 } else {
                     const whichBreak2 = await collection.findOne({
                         employeeID:parseInt(this.employeeID),
@@ -99,7 +104,7 @@ class recordBreakWork {
                         }
                         const result = await collection.updateOne({employeeID:parseInt(this.employeeID),todayWage:null},updateData)
                         if (result.modifiedCount >0) {
-                            checkResult ='休憩の打刻に成功しました。'
+                            checkResult ='休憩終了の打刻に成功しました。'
                         } else {
                             checkResult = '休憩の打刻に失敗しました。';
                         }
@@ -109,7 +114,7 @@ class recordBreakWork {
                 }
             } else {
                 //そもそも勤務中ではない
-                checkResult = '出勤が未完了か、すでに退勤されています。';
+                checkResult = '出勤が未完了です。';
             }
             
         } catch(err) {

@@ -19,7 +19,8 @@ class insertEditedRecord{
                     startTime: this.formattedStartTime,
                     breakStartTime: this.formattedBreakStartTime,
                     breakEndTime: this.formattedBreakEndTime,
-                    endTime: this.formattedEndTime
+                    endTime: this.formattedEndTime,
+                    finished:true,
                 }
             };
             const result = await collection.updateOne(
