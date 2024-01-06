@@ -48,6 +48,8 @@ exports.postAttendance = async(req,res) => {
                 recordBreakStartTime = new recordBreakWork(nowTime,employeeID);
                 checkResult = await recordBreakStartTime.writeBreakStartTime();
                 res.redirect(`/?message=${checkResult}`)
+            } else {
+                res.redirect(`/?message=IDかパスワードが正しくありません。`);
             }
         }
 
