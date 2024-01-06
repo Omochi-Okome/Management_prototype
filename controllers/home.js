@@ -1,4 +1,13 @@
 require('date-utils');
+const dayjs = require('dayjs');
+const utc = require('dayjs/plugin/utc');
+
+const timezone = require('dayjs/plugin/timezone');
+
+dayjs.extend(utc);
+dayjs.extend(timezone);
+dayjs.tz.setDefault("Asia/Tokyo");
+
 const {attendanceRegistration} = require('../models/home');
 const {recordStartWork,recordBreakWork,recordEndWork,calculateWage} = require('../models/work');
 const {fetchName,fetchHourlyWage} = require('../models/getFromDatabase');
@@ -16,8 +25,8 @@ exports.postAttendance = async(req,res) => {
     const employeeID = req.body.EmployeeID;
     const employeePassword = req.body.EmployeePassword;
     const action = req.body.action;
-    var currentTime = new Date();
-    var formatted = currentTime.toFormat('YYYY-MM-DDTHH24:MI');
+    var currentTime = dayjs().tz();
+    var formatted = currentTime.format('YYYY-MM-DDTHH:mm');
     const nowTime = formatted;
     const fetchWage = new fetchHourlyWage();
 
